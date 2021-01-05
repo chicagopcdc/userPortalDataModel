@@ -19,12 +19,13 @@ if __name__ == '__main__':
         'userportaldatamodel initialization',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
-        '--username', default='lgraglia', help='dataabase username')
+        '--username', default='amanuensis_user', help='dataabase username')
     parser.add_argument(
-        '--password', default='', help='database password')
+        '--password', default='amanuensis_pass', help='database password')
     parser.add_argument(
         '--host', default='localhost', help='database hostname')
     parser.add_argument(
-        '--db', default='portal_data_db', help='database name')
+        '--db', default='amanuensis_db', help='database name')
     args = parser.parse_args()
     main(**args.__dict__)
+
