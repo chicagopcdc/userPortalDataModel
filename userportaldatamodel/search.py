@@ -31,20 +31,23 @@ class Search(Base):
     __tablename__ = "search"
 
     id = Column(Integer, primary_key=True)
-    project_id = Column(Integer)
     user_id = Column(Integer)
-    es_index = Column(String(255))
-    dataset_version = Column(String(255))
+    name = Column(String)
+    description = Column(String)
 
     es_query = Column(JSONB, server_default=text("'{}'"))
     ids_list = Column(String)
 
+    active = Column(Boolean, default=True)
+    is_superseded_by = Column(Integer, default=None)
+
     update_date = Column(DateTime(timezone=False), server_default=func.now())
     create_date = Column(DateTime(timezone=False), server_default=func.now())
    
-
-    active = Column(Boolean, default=True)
-    is_superseded_by = Column(Integer, default=None)
+    es_index = Column(String(255))
+    dataset_version = Column(String(255))
+    project_id = Column(Integer)
+    
 
    
 
