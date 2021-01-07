@@ -35,31 +35,31 @@ class Search(Base):
     name = Column(String)
     description = Column(String)
 
-    es_query = Column(JSONB, server_default=text("'{}'"))
-    ids_list = Column(String)
+    # es_query = Column(JSONB, server_default=text("'{}'"))
+    # ids_list = Column(String)
 
-    active = Column(Boolean, default=True)
-    is_superseded_by = Column(Integer, default=None)
+    # active = Column(Boolean, default=True)
+    # is_superseded_by = Column(Integer, default=None)
 
-    update_date = Column(DateTime(timezone=False), server_default=func.now())
-    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    # update_date = Column(DateTime(timezone=False), server_default=func.now())
+    # create_date = Column(DateTime(timezone=False), server_default=func.now())
    
-    es_index = Column(String(255))
-    dataset_version = Column(String(255))
-    project_id = Column(Integer)
+    # es_index = Column(String(255))
+    # dataset_version = Column(String(255))
+    # project_id = Column(Integer)
     
 
    
 
-    def __str__(self):
-        str_out = {
-            "id": self.id,
-            "user": self.user_id,
-        }
-        return json.dumps(str_out)
+    # def __str__(self):
+    #     str_out = {
+    #         "id": self.id,
+    #         "user": self.user_id,
+    #     }
+    #     return json.dumps(str_out)
 
-    def __repr__(self):
-        return self.__str__()
+    # def __repr__(self):
+    #     return self.__str__()
 
 
 
