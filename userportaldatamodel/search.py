@@ -36,6 +36,15 @@ class Search(Base):
     name = Column(String, nullable=True)
     description = Column(String, nullable=True)
 
+    def __init__(self, **kwargs):
+        # if "scope" in kwargs:
+        #     scope = kwargs.pop("scope")
+        #     if isinstance(scope, list):
+        #         kwargs["_scope"] = " ".join(scope)
+        #     else:
+        #         kwargs["_scope"] = scope
+        self.id = 1
+
 
     # timestamp = Column(DateTime, server_default=text("now()"), nullable=False)
     # new_values = Column(JSONB, server_default=text("'{}'"))
