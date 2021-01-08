@@ -30,10 +30,16 @@ class Search(Base):
 
     __tablename__ = "search"
 
+    # BigInteger
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer)
-    name = Column(String)
-    description = Column(String)
+    user_id = Column(Integer, nullable=True)
+    name = Column(String, nullable=True)
+    description = Column(String, nullable=True)
+
+
+    # timestamp = Column(DateTime, server_default=text("now()"), nullable=False)
+    # new_values = Column(JSONB, server_default=text("'{}'"))
+
 
     # es_query = Column(JSONB, server_default=text("'{}'"))
     # ids_list = Column(String)
