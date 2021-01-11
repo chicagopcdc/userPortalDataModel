@@ -31,19 +31,19 @@ class Search(Base):
     __tablename__ = "search"
 
     # BigInteger
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, nullable=True)
     name = Column(String, nullable=True)
     description = Column(String, nullable=True)
 
-    def __init__(self, **kwargs):
-        # if "scope" in kwargs:
-        #     scope = kwargs.pop("scope")
-        #     if isinstance(scope, list):
-        #         kwargs["_scope"] = " ".join(scope)
-        #     else:
-        #         kwargs["_scope"] = scope
-        self.id = 1
+    # def __init__(self, **kwargs):
+    #     # if "scope" in kwargs:
+    #     #     scope = kwargs.pop("scope")
+    #     #     if isinstance(scope, list):
+    #     #         kwargs["_scope"] = " ".join(scope)
+    #     #     else:
+    #     #         kwargs["_scope"] = scope
+    #     self.id = 1
 
 
     # timestamp = Column(DateTime, server_default=text("now()"), nullable=False)
