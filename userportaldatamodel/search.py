@@ -32,9 +32,20 @@ class Search(Base):
 
     # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
+    
     user_id = Column(Integer, nullable=True)
+    user_source = Column(String)
+    
     name = Column(String, nullable=True)
     description = Column(String, nullable=True)
+    filter_object = Column(JSONB, server_default=text("'{}'"))
+    ids_list = Column(String, nullable=True)
+
+    es_index = Column(String(255))
+    dataset_version = Column(String(255))
+
+    is_superseded_by = Column(Integer, default=None)
+    active = Column(Boolean, default=True)
 
     # def __init__(self, **kwargs):
     #     # if "scope" in kwargs:
@@ -50,17 +61,12 @@ class Search(Base):
     # new_values = Column(JSONB, server_default=text("'{}'"))
 
 
-    # es_query = Column(JSONB, server_default=text("'{}'"))
-    # ids_list = Column(String)
 
-    # active = Column(Boolean, default=True)
-    # is_superseded_by = Column(Integer, default=None)
 
-    # update_date = Column(DateTime(timezone=False), server_default=func.now())
-    # create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now())
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
    
-    # es_index = Column(String(255))
-    # dataset_version = Column(String(255))
+    
     # project_id = Column(Integer)
     
 
