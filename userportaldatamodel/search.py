@@ -9,6 +9,7 @@ from sqlalchemy import (
     BigInteger,
     DateTime,
     Text,
+    text,
 )
 from sqlalchemy import UniqueConstraint, Index, CheckConstraint
 from sqlalchemy.orm.collections import attribute_mapped_collection
