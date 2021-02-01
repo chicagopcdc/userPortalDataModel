@@ -29,7 +29,7 @@ class ConsortiumDataContributorHasState(Base):
     consortiums = relationship("ConsortiumDataContributor", backref=backref("consortium_data_contributor_has_state"))
 
     state_id = Column(Integer, ForeignKey("State.id"), primary_key=True)
-    state = relationship("State", bbackref=backref("consortium_data_contributor_has_state"))
+    state = relationship("State", backref=backref("consortium_data_contributor_has_state"))
 
     created_at = Column(DateTime(timezone=False), server_default=func.now())
 
