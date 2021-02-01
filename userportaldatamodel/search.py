@@ -9,7 +9,6 @@ from sqlalchemy import (
     BigInteger,
     DateTime,
     Text,
-    text,
 )
 from sqlalchemy import UniqueConstraint, Index, CheckConstraint
 from sqlalchemy.orm.collections import attribute_mapped_collection
@@ -27,10 +26,9 @@ import json
 
 
 class Search(Base):
-
+    
     __tablename__ = "search"
 
-    # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     user_id = Column(Integer, nullable=True)
@@ -47,6 +45,9 @@ class Search(Base):
     is_superseded_by = Column(Integer, default=None)
     active = Column(Boolean, default=True)
 
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+
     # def __init__(self, **kwargs):
     #     # if "scope" in kwargs:
     #     #     scope = kwargs.pop("scope")
@@ -56,31 +57,17 @@ class Search(Base):
     #     #         kwargs["_scope"] = scope
     #     self.id = 1
 
+    def __str__(self):
+        str_out = {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "filter_object": self.filter_object,
+        }
+        return json.dumps(str_out)
 
-    # timestamp = Column(DateTime, server_default=text("now()"), nullable=False)
-    # new_values = Column(JSONB, server_default=text("'{}'"))
-
-
-
-
-    update_date = Column(DateTime(timezone=False), server_default=func.now())
-    create_date = Column(DateTime(timezone=False), server_default=func.now())
-   
-    
-    # project_id = Column(Integer)
-    
-
-   
-
-    # def __str__(self):
-    #     str_out = {
-    #         "id": self.id,
-    #         "user": self.user_id,
-    #     }
-    #     return json.dumps(str_out)
-
-    # def __repr__(self):
-    #     return self.__str__()
+    def __repr__(self):
+        return self.__str__()
 
 
 
