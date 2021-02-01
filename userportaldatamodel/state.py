@@ -29,7 +29,7 @@ class RequestState(Base):
     request = relationship("Request", backref=backref("request_has_state"))
 
     state_id = Column(Integer, ForeignKey("State.id"), primary_key=True)
-    state = relationship("State", bbackref=backref("request_has_state"))
+    state = relationship("State", backref=backref("request_has_state"))
 
     created_at = Column(DateTime(timezone=False), server_default=func.now())
 
