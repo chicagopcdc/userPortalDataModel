@@ -25,7 +25,7 @@ import json
 class ConsortiumDataContributorHasState(Base):
     __tablename__ = "consortium_data_contributor_has_state"
 
-    consortium_id = Column(Integer, ForeignKey("consortiumDataContributor.id"), primary_key=True)
+    consortium_id = Column(Integer, ForeignKey("consortium_data_contributor.id"), primary_key=True)
     consortiums = relationship("ConsortiumDataContributor", backref=backref("consortium_data_contributor_has_state"))
 
     state_id = Column(Integer, ForeignKey("state.id"), primary_key=True)
