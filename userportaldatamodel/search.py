@@ -24,6 +24,19 @@ import json
 
 
 
+class ProjectSearch(Base):
+    __tablename__ = "project_has_search"
+
+    project_id = Column(Integer, ForeignKey("Project.id"), primary_key=True)
+    project = relationship("Project", backref=backref("project_has_search"))
+
+    search_id = Column(Integer, ForeignKey("Search.id"), primary_key=True)
+    search = relationship("Search", backref=backref("project_has_search"))
+
+    created_at = Column(DateTime(timezone=False), server_default=func.now())
+
+
+
 
 
 class Search(Base):

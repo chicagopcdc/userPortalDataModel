@@ -2,7 +2,7 @@
 #     User,
 # )
 
-from .search import Search
+from .search import Search, ProjectSearch
 from .project import Project
 # from .request import Request
 # from .state import State, RequestState
