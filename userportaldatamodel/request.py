@@ -36,8 +36,8 @@ class Request(Base):
     project_id = Column(Integer, ForeignKey("project.id"))
     project = relationship("Project", backref="requests")
 
-    # consortium_data_contributor_id = Column(Integer, ForeignKey("consortium_data_contributor.id"))
-    # consortium_data_contributor = relationship("ConsortiumDataContributor", backref="requests")
+    consortium_data_contributor_id = Column(Integer, ForeignKey("consortium_data_contributor.id"))
+    consortium_data_contributor = relationship("ConsortiumDataContributor", backref="requests")
     
     updated_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
     created_date = Column(DateTime(timezone=False), server_default=func.now())

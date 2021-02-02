@@ -25,10 +25,10 @@ import json
 class RequestState(Base):
     __tablename__ = "request_has_state"
 
-    request_id = Column(Integer, ForeignKey("Request.id"), primary_key=True)
+    request_id = Column(Integer, ForeignKey("request.id"), primary_key=True)
     request = relationship("Request", backref=backref("request_has_state"))
 
-    state_id = Column(Integer, ForeignKey("State.id"), primary_key=True)
+    state_id = Column(Integer, ForeignKey("state.id"), primary_key=True)
     state = relationship("State", backref=backref("request_has_state"))
 
     created_at = Column(DateTime(timezone=False), server_default=func.now())

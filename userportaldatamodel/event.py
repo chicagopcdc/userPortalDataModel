@@ -35,7 +35,7 @@ class Event(Base):
     value = Column(String)
     value_required = Column(String)
 
-    transition_id = Column(Integer, ForeignKey("Transition.id"))
+    transition_id = Column(Integer, ForeignKey("transition.id"))
     transition = relationship("Transition", backref=backref("events"))
 
     created_at = Column(DateTime(timezone=False), server_default=func.now())
