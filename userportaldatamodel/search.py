@@ -73,7 +73,7 @@ class Search(Base):
 class ProjectSearch(Base):
     __tablename__ = "project_has_search"
 
-    project_id = Column(Integer, ForeignKey("Project.id"), primary_key=True)
+    project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
     project = relationship("Project", backref=backref("project_has_search"))
 
     search_id = Column(Integer, ForeignKey("search.id"), primary_key=True)
