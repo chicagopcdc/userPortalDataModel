@@ -23,6 +23,16 @@ from sqlalchemy.orm.collections import MappedCollection, collection
 import json
 
 
+class ProjectSearch(Base):
+    __tablename__ = "project_has_search"
+
+    project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
+    project = relationship("Project", backref=backref("project_has_search"))
+
+    search_id = Column(Integer, ForeignKey("search.id"), primary_key=True)
+    search = relationship("Search", backref=backref("project_has_search"))
+
+    created_at = Column(DateTime(timezone=False), server_default=func.now())
 
 
 class Search(Base):
@@ -70,16 +80,7 @@ class Search(Base):
         return self.__str__()
 
 
-class ProjectSearch(Base):
-    __tablename__ = "project_has_search"
 
-    project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
-    project = relationship("Project", backref=backref("project_has_search"))
-
-    search_id = Column(Integer, ForeignKey("search.id"), primary_key=True)
-    search = relationship("Search", backref=backref("project_has_search"))
-
-    created_at = Column(DateTime(timezone=False), server_default=func.now())
 
 
 
