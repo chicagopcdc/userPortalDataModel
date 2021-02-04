@@ -31,22 +31,22 @@ class RequestState(Base):
     state_id = Column(Integer, ForeignKey("state.id"), primary_key=True)
     state = relationship("State", backref=backref("request_has_state"))
 
-    created_at = Column(DateTime(timezone=False), server_default=func.now())
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
 
 
 
 
 class State(Base):
-    
     __tablename__ = "state"
 
-    # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     name = Column(String)
     code = Column(String)
 
-    created_at = Column(DateTime(timezone=False), server_default=func.now())
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
    
 
     def __str__(self):

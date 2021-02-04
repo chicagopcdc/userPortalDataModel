@@ -28,14 +28,18 @@ class AttributeList(Base):
     
     __tablename__ = "attribute_list"
 
-    # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
-    
     code = Column(String, nullable=True)
     name = Column(String)
-    type = Column(String)
 
-    created_at = Column(DateTime(timezone=False), server_default=func.now())
+    input_type_id = Column(Integer, ForeignKey("input_type.id"), primary_key=True)
+    input_type = relationship("InputType")
+    
+    extra_info = Column(String)
+    extra_info_type = Column(String)
+
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
    
 
     def __str__(self):
@@ -43,7 +47,9 @@ class AttributeList(Base):
             "id": self.id,
             "name": self.name,
             "code": self.code,
-            "type": self.type
+            "type": self.type,
+            "extra_info": self.extra_info,
+            "extra_info_type": self.extra_info_type
         }
         return json.dumps(str_out)
 

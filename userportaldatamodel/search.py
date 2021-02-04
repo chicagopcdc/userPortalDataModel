@@ -32,17 +32,17 @@ class ProjectSearch(Base):
     search_id = Column(Integer, ForeignKey("search.id"), primary_key=True)
     search = relationship("Search", backref=backref("project_has_search"))
 
-    created_at = Column(DateTime(timezone=False), server_default=func.now())
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
 
 
 class Search(Base):
-    
     __tablename__ = "search"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     user_id = Column(Integer, nullable=True)
-    user_source = Column(String)
+    user_source = Column(String, default='fence')
     
     name = Column(String, nullable=True)
     description = Column(String, nullable=True)
@@ -55,8 +55,8 @@ class Search(Base):
     is_superseded_by = Column(Integer, default=None)
     active = Column(Boolean, default=True)
 
-    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
     create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
 
     # def __init__(self, **kwargs):
     #     # if "scope" in kwargs:

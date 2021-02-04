@@ -28,10 +28,10 @@ class Receiver(Base):
     
     __tablename__ = "receiver"
 
-    # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     receiver_id = Column(Integer)
+    receiver_source = Column(String, default='fence')
     received_at = Column(DateTime(timezone=False), server_default=func.now())
 
     message_id = Column(Integer, ForeignKey("message.id"))

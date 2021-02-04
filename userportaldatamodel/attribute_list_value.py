@@ -24,22 +24,19 @@ import json
 
 
 
-class Attributes(Base):
+class AttributeListValue(Base):
     
-    __tablename__ = "attributes"
+    __tablename__ = "attribute_list_value"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     
-    attribute_list_id = Column(Integer, ForeignKey("attribute_list.id"))
-    attribute_list = relationship("AttributeList", backref="attribute")
-
-    request_id = Column(Integer, ForeignKey("request.id"))
-    request = relationship("Request", backref="messages")
-
     value = Column(String)
+    
+    input_type_id = Column(Integer, ForeignKey("input_type.id"), primary_key=True)
+    input_type = relationship("InputType")
 
-    user_id = Column(Integer, nullable=True)
-    user_source = Column(String, default='fence')
+    attribute_list_id = Column(Integer, ForeignKey("attribute_list.id"))
+    attribute_list = relationship("AttributeList", backref="values")
 
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
@@ -48,9 +45,8 @@ class Attributes(Base):
     def __str__(self):
         str_out = {
             "id": self.id,
-            "value": self.value,
-            "attribute_list_id": self.attribute_list_id,
-            "request_id": self.request_id
+            "value": self.name,
+            "type": self.type
         }
         return json.dumps(str_out)
 

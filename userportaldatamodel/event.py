@@ -25,26 +25,29 @@ import json
 
 
 class Event(Base):
-    
     __tablename__ = "event"
 
-    # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
     
-    type = Column(String)
     value = Column(String)
     value_required = Column(String)
+    is_ec_request = Column(Boolean)
+
+    input_type_id = Column(Integer, ForeignKey("input_type.id"), primary_key=True)
+    input_type = relationship("InputType")
 
     transition_id = Column(Integer, ForeignKey("transition.id"))
     transition = relationship("Transition", backref=backref("events"))
 
-    created_at = Column(DateTime(timezone=False), server_default=func.now())
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
    
 
     def __str__(self):
         str_out = {
             "id": self.id,
-            "name": self.name
+            "name": self.name,
+            "input_type": self.input_type_id
         }
         return json.dumps(str_out)
 

@@ -31,25 +31,27 @@ class ConsortiumDataContributorHasState(Base):
     state_id = Column(Integer, ForeignKey("state.id"), primary_key=True)
     state = relationship("State", backref=backref("consortium_data_contributor_has_state"))
 
-    created_at = Column(DateTime(timezone=False), server_default=func.now())
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
 
 
 class ConsortiumDataContributor(Base):
-    
     __tablename__ = "consortium_data_contributor"
 
-    # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
-    
+    code = Column(String)
     name = Column(String)
-
-    created_at = Column(DateTime(timezone=False), server_default=func.now())
+    
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
    
 
     def __str__(self):
         str_out = {
             "id": self.id,
-            "name": self.name
+            "name": self.name,
+            "code": self.code,
+            "updated_at": self.updated_at
         }
         return json.dumps(str_out)
 

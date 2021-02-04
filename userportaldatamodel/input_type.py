@@ -22,50 +22,24 @@ from sqlalchemy.orm.collections import MappedCollection, collection
 import json
 
 
+class InputType(Base):
+    __tablename__ = "input_type"
 
-
-class Project(Base):
-    
-    __tablename__ = "project"
-
-    # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
-    
-    first_name = Column(String)
-    last_name = Column(String)
-    user_id = Column(Integer, nullable=True)
-    user_source = Column(String, default='fence')
-    #TODO potentially this could be an hubspot ID
-    institution = Column(String)
+    code = Column(String)
+    function = Column(String)
     description = Column(String)
-
-    active = Column(Boolean, default=True)
-
-
-    # searches = association_proxy()
-
-
-    # def __init__(self, **kwargs):
-    #     # if "scope" in kwargs:
-    #     #     scope = kwargs.pop("scope")
-    #     #     if isinstance(scope, list):
-    #     #         kwargs["_scope"] = " ".join(scope)
-    #     #     else:
-    #     #         kwargs["_scope"] = scope
-    #     self.id = 1
-
-
-    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
+    
     create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
    
 
     def __str__(self):
         str_out = {
             "id": self.id,
-            "user_id": self.user_id,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "institution": self.institution
+            "code": self.code,
+            "function": self.function,
+            "description": self.updated_at
         }
         return json.dumps(str_out)
 

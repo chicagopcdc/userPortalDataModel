@@ -25,15 +25,14 @@ import json
 
 
 class Message(Base):
-    
     __tablename__ = "message"
 
-    # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     sender_id = Column(Integer, nullable=True)
+    sender_source = Column(String, default='fence')
     sent_at = Column(DateTime(timezone=False), server_default=func.now())
-    message = Column(String)
+    body = Column(String)
 
     request_id = Column(Integer, ForeignKey("request.id"))
     request = relationship("Request", backref="messages")
@@ -44,7 +43,7 @@ class Message(Base):
             "id": self.id,
             "sender_id": self.sender_id,
             "sent_at": self.sent_at,
-            "message": self.message
+            "body": self.body
         }
         return json.dumps(str_out)
 

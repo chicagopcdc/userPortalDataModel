@@ -25,10 +25,8 @@ import json
 
 
 class Transition(Base):
-    
     __tablename__ = "transition"
 
-    # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     state_src_id = Column(Integer, ForeignKey("state.id"))
@@ -37,11 +35,14 @@ class Transition(Base):
     state_dst_id = Column(Integer, ForeignKey("state.id"))
     state_dst = relationship("State", backref=backref("transition"))
 
-    created_at = Column(DateTime(timezone=False), server_default=func.now())
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
 
     def __str__(self):
         str_out = {
-            "id": self.id
+            "id": self.id,
+            "state_src": self.state_src_id,
+            "state_dst": self.state_dst_id
         }
         return json.dumps(str_out)
 
