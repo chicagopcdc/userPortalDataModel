@@ -30,10 +30,10 @@ class Transition(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     state_src_id = Column(Integer, ForeignKey("state.id"))
-    state_src = relationship("State", backref=backref("transition_src"))
+    state_src = relationship("State", backref=backref("transition_src"), foreign_keys=[state_src_id])
 
     state_dst_id = Column(Integer, ForeignKey("state.id"))
-    state_dst = relationship("State", backref=backref("transition_dst"))
+    state_dst = relationship("State", backref=backref("transition_dst"), foreign_keys=[state_dst_id])
 
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
