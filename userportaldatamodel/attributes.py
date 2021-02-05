@@ -34,7 +34,7 @@ class Attributes(Base):
     attribute_list = relationship("AttributeList", backref="attribute")
 
     request_id = Column(Integer, ForeignKey("request.id"))
-    request = relationship("Request", backref="messages")
+    request = relationship("Request", backref="attributes")
 
     value = Column(String)
 
