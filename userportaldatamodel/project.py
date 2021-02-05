@@ -42,7 +42,7 @@ class Project(Base):
     active = Column(Boolean, default=True)
 
 
-    # searches = association_proxy()
+    searches = association_proxy('searches', 'search')
 
 
     # def __init__(self, **kwargs):
