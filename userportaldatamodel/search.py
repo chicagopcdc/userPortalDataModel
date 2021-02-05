@@ -27,13 +27,26 @@ class ProjectSearch(Base):
     __tablename__ = "project_has_search"
 
     project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
-    project = relationship("Project", backref=backref("project_has_search"))
+    project = relationship("Project", backref=backref("searches"))
 
     search_id = Column(Integer, ForeignKey("search.id"), primary_key=True)
-    search = relationship("Search", backref=backref("project_has_search"))
+    search = relationship("Search", backref=backref("projects"))
 
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
+
+
+# class ProjectSearch(Base):
+#     __tablename__ = 'project_has_search'
+#     project_id = Column(
+#         Integer, 
+#         ForeignKey('project.id'), 
+#         primary_key = True)
+
+#     search_id = Column(
+#         Integer, 
+#         ForeignKey('search.id'), 
+#         primary_key = True)
 
 
 class Search(Base):
