@@ -29,7 +29,7 @@ class Request(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     
-    project_id = Column(Integer, ForeignKey("project.id"))
+    project_id = Column(Integer, ForeignKey("project.id"), nullable=True)
     project = relationship("Project", backref="requests")
 
     consortium_data_contributor_id = Column(Integer, ForeignKey("consortium_data_contributor.id"))
