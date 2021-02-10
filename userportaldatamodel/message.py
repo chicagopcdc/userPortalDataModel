@@ -21,6 +21,9 @@ from sqlalchemy.types import LargeBinary
 from sqlalchemy.orm.collections import MappedCollection, collection
 import json
 
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from marshmallow_sqlalchemy.fields import Nested
+
 
 
 
@@ -50,3 +53,14 @@ class Message(Base):
     def __repr__(self):
         return self.__str__()
 
+
+
+class MessageSchema(SQLAlchemyAutoSchema):
+
+    receivers = Nested(ReceiverSchema, many=True, exclude=("message",))
+
+    class Meta:
+        model = Message
+        include_relationships = True
+        load_instance = True
+        include_fk = True

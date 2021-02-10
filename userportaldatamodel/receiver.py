@@ -22,6 +22,7 @@ from sqlalchemy.orm.collections import MappedCollection, collection
 import json
 
 
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 
 class Receiver(Base):
@@ -49,3 +50,8 @@ class Receiver(Base):
     def __repr__(self):
         return self.__str__()
 
+
+
+class ReceiverSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Receiver
