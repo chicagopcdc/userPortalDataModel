@@ -61,6 +61,6 @@ class MessageSchema(SQLAlchemyAutoSchema):
 
     class Meta:
         model = Message
-        include_relationships = True
-        load_instance = True
-        include_fk = True
+        # include_relationships = True
+        # load_instance = True
+        # include_fk = True
