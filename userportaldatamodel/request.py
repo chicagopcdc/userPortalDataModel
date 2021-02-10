@@ -29,11 +29,11 @@ class Request(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     
-    project_id = Column(Integer, ForeignKey("project.id"), nullable=True)
+    project_id = Column(Integer, ForeignKey("project.id"))
     project = relationship("Project", backref="requests")
 
-    consortium_data_contributor_id = Column(Integer, ForeignKey("consortium_data_contributor.id"))
-    consortium_data_contributor = relationship("ConsortiumDataContributor", backref="requests")
+    # consortium_data_contributor_id = Column(Integer, ForeignKey("consortium_data_contributor.id"))
+    # consortium_data_contributor = relationship("ConsortiumDataContributor", backref="requests")
     
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
@@ -43,8 +43,7 @@ class Request(Base):
     def __str__(self):
         str_out = {
             "id": self.id,
-            "project_id": self.project_id,
-            "consortium_id": self.consortium_id
+            "project": self.project,
         }
         return json.dumps(str_out)
 

@@ -83,6 +83,7 @@ class Search(Base):
     def __str__(self):
         str_out = {
             "id": self.id,
+            "user_id": self.user_id,
             "name": self.name,
             "description": self.description,
             "filter_object": self.filter_object,

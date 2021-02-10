@@ -66,7 +66,9 @@ class Project(Base):
             "user_id": self.user_id,
             "first_name": self.first_name,
             "last_name": self.last_name,
-            "institution": self.institution
+            "institution": self.institution,
+            "description": self.description,
+            "searches": self.searches
         }
         return json.dumps(str_out)
 

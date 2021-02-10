@@ -32,7 +32,7 @@ class AttributeList(Base):
     code = Column(String, nullable=True)
     name = Column(String)
 
-    input_type_id = Column(Integer, ForeignKey("input_type.id"), primary_key=True)
+    input_type_id = Column(Integer, ForeignKey("input_type.id")) # , primary_key=True
     input_type = relationship("InputType")
     
     extra_info = Column(String)
