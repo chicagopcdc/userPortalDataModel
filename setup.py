@@ -22,6 +22,6 @@ setup(
     name="userportaldatamodel",
     version="0.0.1", # get_version(),
     packages=find_packages(),
-    install_requires=["sqlalchemy~=1.3.3", "cdislogging"],
+    install_requires=["sqlalchemy~=1.3.3", "cdislogging", "marshmallow-sqlalchemy"],
     scripts=["bin/userportaldatamodel-init"],
 )
