@@ -43,8 +43,7 @@ class Message(Base):
             "id": self.id,
             "sender_id": self.sender_id,
             "sent_at": self.sent_at,
-            "body": self.body,
-            "request": self.request
+            "body": self.body
         }
         return json.dumps(str_out)
 

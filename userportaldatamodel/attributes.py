@@ -31,10 +31,10 @@ class Attributes(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     attribute_list_id = Column(Integer, ForeignKey("attribute_list.id"))
-    attribute_list = relationship("AttributeList", backref="attribute")
+    attribute_list = relationship("AttributeList", backref="attribute_has_list")
 
     request_id = Column(Integer, ForeignKey("request.id"))
-    request = relationship("Request", backref="attributes")
+    request = relationship("Request", backref="attribute_in_request")
 
     value = Column(String)
 
