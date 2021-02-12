@@ -52,6 +52,6 @@ class Receiver(Base):
 
 
 
-class ReceiverSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = Receiver
+# class ReceiverSchema(SQLAlchemyAutoSchema):
+#     class Meta:
+#         model = Receiver

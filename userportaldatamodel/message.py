@@ -24,7 +24,7 @@ import json
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from marshmallow_sqlalchemy.fields import Nested
 
-from .schema import ReceiverSchema
+# from .schema import ReceiverSchema
 
 
 
@@ -57,12 +57,12 @@ class Message(Base):
 
 
 
-class MessageSchema(SQLAlchemyAutoSchema):
+# class MessageSchema(SQLAlchemyAutoSchema):
 
-    receivers = Nested(ReceiverSchema, many=True, exclude=("message",))
+#     receivers = Nested(ReceiverSchema, many=True, exclude=("message",))
 
-    class Meta:
-        model = Message
-        # include_relationships = True
-        # load_instance = True
-        # include_fk = True
+#     class Meta:
+#         model = Message
+#         # include_relationships = True
+#         # load_instance = True
+#         # include_fk = True
