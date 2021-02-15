@@ -4,6 +4,6 @@ from .search_schema import SearchSchema
 from .project_schema import ProjectSchema
 from .request_schema import RequestSchema
 from .attributes_schema import AttributesSchema
-from .attributes_list_schema import AttributeListSchema
-from .attributes_list_value_schema import AttributeListValueSchema
-from .imput_type_schema import InputType
+from .attribute_list_schema import AttributeListSchema
+from .attribute_list_value_schema import AttributeListValueSchema
+from .input_type_schema import InputType
