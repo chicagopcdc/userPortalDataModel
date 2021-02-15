@@ -1,11 +1,12 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from marshmallow_sqlalchemy.fields import Nested
 
-from amanuensis.models import Message
+from userportaldatamodel.models import Message
+# from userportaldatamodel.schemas import ReceiverSchema
 
 
 class MessageSchema(SQLAlchemyAutoSchema):
-    receivers = Nested(ReceiverSchema, many=True) # , exclude=("message",)
+    receivers = Nested('ReceiverSchema', many=True) # , exclude=("message",)
 
     class Meta:
         model = Message
