@@ -7,7 +7,7 @@ from userportaldatamodel.models import Request
 class RequestSchema(SQLAlchemyAutoSchema):
     messages = Nested('MessageSchema', many=True)
     attributes = Nested('AttributesSchema', many=True)
-    project = Nested('ProjectSchema')
+    project = Nested('ProjectSchema', exclude=["requests"])
 
     class Meta:
         model = Request
