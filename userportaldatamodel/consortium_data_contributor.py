@@ -22,17 +22,17 @@ from sqlalchemy.orm.collections import MappedCollection, collection
 import json
 
 
-class ConsortiumDataContributorHasState(Base):
-    __tablename__ = "consortium_data_contributor_has_state"
+# class ConsortiumDataContributorHasState(Base):
+#     __tablename__ = "consortium_data_contributor_has_state"
 
-    consortium_id = Column(Integer, ForeignKey("consortium_data_contributor.id"), primary_key=True)
-    consortiums = relationship("ConsortiumDataContributor", backref=backref("consortium_data_contributor_has_state"))
+#     consortium_id = Column(Integer, ForeignKey("consortium_data_contributor.id"), primary_key=True)
+#     consortiums = relationship("ConsortiumDataContributor", backref=backref("consortium_data_contributor_has_state"))
 
-    state_id = Column(Integer, ForeignKey("state.id"), primary_key=True)
-    state = relationship("State", backref=backref("consortium_data_contributor_has_state"))
+#     state_id = Column(Integer, ForeignKey("state.id"), primary_key=True)
+#     state = relationship("State", backref=backref("consortium_data_contributor_has_state"))
 
-    create_date = Column(DateTime(timezone=False), server_default=func.now())
-    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
+#     create_date = Column(DateTime(timezone=False), server_default=func.now())
+#     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
 
 
 class ConsortiumDataContributor(Base):
