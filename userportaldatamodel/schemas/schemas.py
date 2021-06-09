@@ -6,4 +6,5 @@ from .request_schema import RequestSchema
 from .attributes_schema import AttributesSchema
 from .attribute_list_schema import AttributeListSchema
 from .attribute_list_value_schema import AttributeListValueSchema
-from .input_type_schema import InputType
+from .input_type_schema import InputTypeSchema
+from .consortium_data_contributor_schema import ConsortiumDataContributorSchema
