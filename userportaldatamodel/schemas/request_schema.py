@@ -8,6 +8,7 @@ class RequestSchema(SQLAlchemyAutoSchema):
     messages = Nested('MessageSchema', many=True)
     attributes = Nested('AttributesSchema', many=True)
     project = Nested('ProjectSchema', exclude=["requests",])
+    consortium_data_contributor = Nested('ConsortiumDataContributorSchema', exclude=["requests",])
 
     class Meta:
         model = Request
