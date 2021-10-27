@@ -43,7 +43,7 @@ class Receiver(Base):
         str_out = {
             "id": self.id,
             "receiver_id": self.receiver_id,
-            "received_at": self.sent_at,
+            "received_at": self.received_at,
         }
         return json.dumps(str_out)
 
