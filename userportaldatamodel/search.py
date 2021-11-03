@@ -1,5 +1,9 @@
-from . import Base
+import json
 import datetime
+import enum
+
+from . import Base
+
 from sqlalchemy import (
     Integer,
     String,
@@ -10,6 +14,7 @@ from sqlalchemy import (
     DateTime,
     Text,
     text,
+    Enum
 )
 from sqlalchemy import UniqueConstraint, Index, CheckConstraint
 from sqlalchemy.orm.collections import attribute_mapped_collection
@@ -20,7 +25,16 @@ from sqlalchemy.schema import ForeignKey
 from sqlalchemy.sql import func
 from sqlalchemy.types import LargeBinary
 from sqlalchemy.orm.collections import MappedCollection, collection
-import json
+
+
+class FilterSourceType(enum.Enum):
+    """
+    List the possible types of filter sources
+    - None (no authentication).
+    - Basic (using basic HTTP authorization header to include the client ID & secret).
+    - POST (the client ID & secret are included in the body of a POST request).
+    """
+    explorer = "explorer"
 
 
 class ProjectSearch(Base):
@@ -60,6 +74,8 @@ class Search(Base):
     name = Column(String, nullable=True)
     description = Column(String, nullable=True)
     filter_object = Column(JSONB, server_default=text("'{}'"))
+    filter_souce = Column(Enum(FilterSourceType))
+    filter_souce_internal_id = Column(Integer, default=None)
     ids_list = Column(String, nullable=True)
 
     es_index = Column(String(255))
