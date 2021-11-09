@@ -23,38 +23,70 @@ from sqlalchemy.orm.collections import MappedCollection, collection
 import json
 
 
+class ProjectSearch(Base):
+    __tablename__ = "project_has_search"
 
+    project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
+    project = relationship("Project", backref=backref("search_in_project"))
+
+    search_id = Column(Integer, ForeignKey("search.id"), primary_key=True)
+    search = relationship("Search", backref=backref("project_has_search"))
+
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
+
+
+# class ProjectSearch(Base):
+#     __tablename__ = 'project_has_search'
+#     project_id = Column(
+#         Integer, 
+#         ForeignKey('project.id'), 
+#         primary_key = True)
+
+#     search_id = Column(
+#         Integer, 
+#         ForeignKey('search.id'), 
+#         primary_key = True)
 
 
 class Search(Base):
-
     __tablename__ = "search"
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer)
-    name = Column(String)
-    description = Column(String)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    
+    user_id = Column(Integer, nullable=True)
+    user_source = Column(String, default='fence')
+    
+    name = Column(String, nullable=True)
+    description = Column(String, nullable=True)
+    filter_object = Column(JSONB, server_default=text("'{}'"))
+    ids_list = Column(String, nullable=True)
 
-    es_query = Column(JSONB, server_default=text("'{}'"))
-    ids_list = Column(String)
-
-    active = Column(Boolean, default=True)
-    is_superseded_by = Column(Integer, default=None)
-
-    update_date = Column(DateTime(timezone=False), server_default=func.now())
-    create_date = Column(DateTime(timezone=False), server_default=func.now())
-   
     es_index = Column(String(255))
     dataset_version = Column(String(255))
-    project_id = Column(Integer)
-    
 
-   
+    is_superseded_by = Column(Integer, default=None)
+    active = Column(Boolean, default=True)
+
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
+
+    # def __init__(self, **kwargs):
+    #     # if "scope" in kwargs:
+    #     #     scope = kwargs.pop("scope")
+    #     #     if isinstance(scope, list):
+    #     #         kwargs["_scope"] = " ".join(scope)
+    #     #     else:
+    #     #         kwargs["_scope"] = scope
+    #     self.id = 1
 
     def __str__(self):
         str_out = {
             "id": self.id,
-            "user": self.user_id,
+            "user_id": self.user_id,
+            "name": self.name,
+            "description": self.description,
+            "filter_object": self.filter_object,
         }
         return json.dumps(str_out)
 
