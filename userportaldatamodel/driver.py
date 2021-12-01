@@ -3,7 +3,7 @@ from cdislogging import get_logger
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 from sqlalchemy import create_engine
-from sqlalchemy import String, Column, MetaData, Table
+from sqlalchemy import String, Column, MetaData, Table, Enum
 from .models import *  # noqa
 
 
@@ -94,6 +94,8 @@ class SQLAlchemyDriver(object):
 
     def post_migrate(self):
         md = MetaData()
+
+
         # add_foreign_key_column_if_not_exist(
         #     table_name=User.__tablename__,
         #     column_name="google_proxy_group_id",
@@ -104,10 +106,23 @@ class SQLAlchemyDriver(object):
         #     metadata=md,
         # )
 
-        # col_names = ["display_name", "phone_number"]
+        add_column_if_not_exist(
+                table_name=Search.__tablename__,
+                column=Column("filter_souce", Enum(FilterSourceType)),
+                driver=self,
+                metadata=md,
+            )
+        add_column_if_not_exist(
+                table_name=Search.__tablename__,
+                column=Column("filter_souce_internal_id", Integer),
+                driver=self,
+                metadata=md,
+            )
+
+        # col_names = ["filter_souce", "filter_souce_internal_id"]
         # for col in col_names:
         #     add_column_if_not_exist(
-        #         table_name=User.__tablename__,
+        #         table_name=Search.__tablename__,
         #         column=Column(col, String),
         #         driver=self,
         #         metadata=md,
