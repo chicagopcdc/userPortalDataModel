@@ -74,8 +74,8 @@ class Search(Base):
     name = Column(String, nullable=True)
     description = Column(String, nullable=True)
     filter_object = Column(JSONB, server_default=text("'{}'"))
-    filter_souce = Column(Enum(FilterSourceType))
-    filter_souce_internal_id = Column(Integer, default=None)
+    filter_source = Column(Enum(FilterSourceType))
+    filter_source_internal_id = Column(Integer, default=None)
     ids_list = Column(String, nullable=True)
 
     es_index = Column(String(255))
