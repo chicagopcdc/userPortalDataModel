@@ -108,13 +108,13 @@ class SQLAlchemyDriver(object):
 
         add_column_if_not_exist(
                 table_name=Search.__tablename__,
-                column=Column("filter_souce", Enum(FilterSourceType)),
+                column=Column("filter_source", Enum(FilterSourceType)),
                 driver=self,
                 metadata=md,
             )
         add_column_if_not_exist(
                 table_name=Search.__tablename__,
-                column=Column("filter_souce_internal_id", Integer),
+                column=Column("filter_source_internal_id", Integer),
                 driver=self,
                 metadata=md,
             )
