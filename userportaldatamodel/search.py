@@ -1,7 +1,6 @@
 import json
 import datetime
 import enum
-from dataclasses import dataclass
 
 from . import Base
 
@@ -27,7 +26,6 @@ from sqlalchemy.sql import func
 from sqlalchemy.types import LargeBinary
 from sqlalchemy.orm.collections import MappedCollection, collection
 
-@dataclass
 class FilterSourceType(enum.Enum):
     """
     List the possible types of filter sources
@@ -36,6 +34,12 @@ class FilterSourceType(enum.Enum):
     - POST (the client ID & secret are included in the body of a POST request).
     """
     explorer = "explorer"
+
+    def __str__(self):
+        return self.value
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class ProjectSearch(Base):
@@ -63,7 +67,6 @@ class ProjectSearch(Base):
 #         ForeignKey('search.id'), 
 #         primary_key = True)
 
-@dataclass
 class Search(Base):
     __tablename__ = "search"
 
@@ -103,7 +106,8 @@ class Search(Base):
             "user_id": self.user_id,
             "name": self.name,
             "description": self.description,
-            "filter_object": self.filter_object,
+            "filter_source_internal_id": self.filter_source_internal_id,
+            "filter_object": self.filter_object
         }
         return json.dumps(str_out)
 
