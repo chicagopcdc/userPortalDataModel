@@ -26,17 +26,17 @@ from sqlalchemy.sql import func
 from sqlalchemy.types import LargeBinary
 from sqlalchemy.orm.collections import MappedCollection, collection
 
-class FilterSourceType(enum.Enum):
+class FilterSourceType(str, enum.Enum):
     """
     List the possible types of filter sources
     - None (no authentication).
     - Basic (using basic HTTP authorization header to include the client ID & secret).
     - POST (the client ID & secret are included in the body of a POST request).
     """
-    explorer = "explorer"
+    explorer:str = "explorer"
 
     def __str__(self):
-        return self.value
+        return json.dumps(self.explorer)
 
     def __repr__(self):
         return self.__str__()
