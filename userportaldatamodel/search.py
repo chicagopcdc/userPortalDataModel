@@ -1,6 +1,7 @@
 import json
 import datetime
 import enum
+from dataclasses import dataclass
 
 from . import Base
 
@@ -26,7 +27,7 @@ from sqlalchemy.sql import func
 from sqlalchemy.types import LargeBinary
 from sqlalchemy.orm.collections import MappedCollection, collection
 
-
+@dataclass
 class FilterSourceType(enum.Enum):
     """
     List the possible types of filter sources
@@ -62,7 +63,7 @@ class ProjectSearch(Base):
 #         ForeignKey('search.id'), 
 #         primary_key = True)
 
-
+@dataclass
 class Search(Base):
     __tablename__ = "search"
 
