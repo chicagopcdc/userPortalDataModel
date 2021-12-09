@@ -1,7 +1,7 @@
 from enum import Enum
 
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from marshmallow_sqlalchemy.fields import Enum
+from marshmallow_enum import EnumField
 from userportaldatamodel.models import FilterSourceType, Search
 
 
@@ -11,7 +11,7 @@ from userportaldatamodel.models import FilterSourceType, Search
 
 
 class SearchSchema(SQLAlchemyAutoSchema):
-    filter_source = Enum(FilterSourceType)
+    filter_source = EnumField(FilterSourceType, by_value=True)
 
     class Meta:
         model = Search
