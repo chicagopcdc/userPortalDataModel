@@ -11,7 +11,7 @@ from userportaldatamodel.models import FilterSourceType, Search
 
 
 class SearchSchema(SQLAlchemyAutoSchema):
-    filter_source = EnumField(FilterSourceType, by_value=True)
+    # filter_source = EnumField(FilterSourceType, by_value=True)
 
     class Meta:
         model = Search
