@@ -1,2 +1,1 @@
-include README README.md LICENSE CHANGELOG
 recursive-include *.py
