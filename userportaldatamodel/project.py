@@ -31,6 +31,7 @@ class Project(Base):
     # BigInteger
     id = Column(Integer, primary_key=True, autoincrement=True)
     
+    name = Column(String, nullable=True)
     first_name = Column(String)
     last_name = Column(String)
     user_id = Column(Integer, nullable=True)
@@ -38,6 +39,8 @@ class Project(Base):
     #TODO potentially this could be an hubspot ID
     institution = Column(String)
     description = Column(String)
+
+    approved_url = Column(String, nullable=True, default=None)
 
     active = Column(Boolean, default=True)
 
