@@ -3,7 +3,7 @@ from cdislogging import get_logger
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 from sqlalchemy import create_engine
-from sqlalchemy import String, Column, MetaData, Table, Enum, Integer
+from sqlalchemy import String, Column, MetaData, Table, Enum, Integer, Text
 from .models import *  # noqa
 
 
@@ -119,6 +119,33 @@ class SQLAlchemyDriver(object):
                 metadata=md,
             )
 
+        add_column_if_not_exist(
+                table_name=Project.__tablename__,
+                column=Column("name", String, nullable=True),
+                driver=self,
+                metadata=md,
+            )
+        add_column_if_not_exist(
+                table_name=Project.__tablename__,
+                column=Column("approved_url", String, nullable=True, default=None),
+                driver=self,
+                metadata=md,
+            )
+
+        add_value_to_existing_enum(
+                table_name=Search.__tablename__, 
+                column_name="filter_source", 
+                driver=self,
+                enum_obj=Enum(FilterSourceType),
+                enum_name="filtersourcetype"
+            )
+        change_column_type(
+                table_name=Search.__tablename__, 
+                column_name="ids_list", 
+                driver=self, 
+                column_type=Text)
+
+
         # col_names = ["filter_souce", "filter_souce_internal_id"]
         # for col in col_names:
         #     add_column_if_not_exist(
@@ -128,6 +155,41 @@ class SQLAlchemyDriver(object):
         #         metadata=md,
         #     )
 
+def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_name):
+    enum_name = enum_name
+    tmp_enum_name = "tmp_" + enum_name
+    with driver.session as session:
+        # Rename current enum type to tmp_
+        session.execute(
+            'ALTER TYPE {} RENAME TO {};'.format(
+                enum_name, tmp_enum_name
+            )
+        )
+        session.commit()
+
+        # Create new enum type in db
+        enum_obj.create(session)
+
+        # Update column to use new enum type
+        session.execute(
+            'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING {}::text::{};'.format(
+                table_name, column_name, enum_name, column_name, enum_name
+            )
+        )
+    
+        # Drop old enum type
+        session.execute('DROP TYPE ' + tmp_enum_name)
+        session.commit()
+
+def change_column_type(table_name, column_name, driver, column_type):
+    with driver.session as session:
+        # Update column to use new type
+        session.execute(
+            'ALTER TABLE {} ALTER COLUMN {} TYPE {};'.format(
+                table_name, column_name, column_type
+            )
+        )
+        session.commit()
 
 def add_foreign_key_column_if_not_exist(
     table_name,
@@ -144,11 +206,9 @@ def add_foreign_key_column_if_not_exist(
         table_name, column_name, fk_table_name, fk_column_name, driver, metadata
     )
 
-
 def drop_foreign_key_column_if_exist(table_name, column_name, driver, metadata):
     drop_foreign_key_constraint_if_exist(table_name, column_name, driver, metadata)
     drop_column_if_exist(table_name, column_name, driver, metadata)
-
 
 def add_column_if_not_exist(table_name, column, driver, metadata):
     column_name = column.compile(dialect=driver.engine.dialect)
@@ -164,7 +224,6 @@ def add_column_if_not_exist(table_name, column, driver, metadata):
             )
             session.commit()
 
-
 def drop_column_if_exist(table_name, column_name, driver, metadata):
     table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
     if column_name in table.c:
@@ -173,7 +232,6 @@ def drop_column_if_exist(table_name, column_name, driver, metadata):
                 'ALTER TABLE "{}" DROP COLUMN {};'.format(table_name, column_name)
             )
             session.commit()
-
 
 def add_foreign_key_constraint_if_not_exist(
     table_name, column_name, fk_table_name, fk_column_name, driver, metadata
@@ -195,7 +253,6 @@ def add_foreign_key_constraint_if_not_exist(
                     )
                 )
                 session.commit()
-
 
 def drop_foreign_key_constraint_if_exist(table_name, column_name, driver, metadata):
     table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
