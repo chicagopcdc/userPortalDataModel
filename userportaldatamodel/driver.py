@@ -168,7 +168,7 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
         session.commit()
 
         # Create new enum type in db
-        enum_obj.create(session)
+        enum_obj.create(session.get_bind())
 
         # Update column to use new enum type
         session.execute(
