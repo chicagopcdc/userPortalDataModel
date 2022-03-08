@@ -143,7 +143,7 @@ class SQLAlchemyDriver(object):
                 table_name=Search.__tablename__, 
                 column_name="ids_list", 
                 driver=self, 
-                column_type=Text,
+                column_type="text",
                 metadata=md
             )
 
@@ -175,8 +175,12 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
             """.format('filtersourcetype')
             )
 
-        for row in rs:
-            print(row)
+        # for row in rs:
+        #     print(row)
+
+        print(rs[0])
+        print(enum_obj)
+        print(rs[0][0])
 
 
         # session.execute(
