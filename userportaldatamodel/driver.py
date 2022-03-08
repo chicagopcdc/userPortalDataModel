@@ -180,7 +180,8 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
 
         
         print(rs[0][0])
-        print([e.value for e in enum_obj])
+        print([e.value for e in FilterSourceType])
+        print(FilterSourceType.__members__.values())
 
 
         # session.execute(
