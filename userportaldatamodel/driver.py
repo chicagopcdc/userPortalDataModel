@@ -139,11 +139,13 @@ class SQLAlchemyDriver(object):
                 enum_obj=Enum(FilterSourceType),
                 enum_name="filtersourcetype"
             )
-        change_column_type(
+        change_column_type_if_exist(
                 table_name=Search.__tablename__, 
                 column_name="ids_list", 
                 driver=self, 
-                column_type=Text)
+                column_type=Text,
+                metadata=md
+            )
 
 
         # col_names = ["filter_souce", "filter_souce_internal_id"]
@@ -160,37 +162,75 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
     tmp_enum_name = "tmp_" + enum_name
     with driver.session as session:
         # Rename current enum type to tmp_
-        session.execute(
-            'ALTER TYPE {} RENAME TO {};'.format(
-                enum_name, tmp_enum_name
+        # APPROACH 1
+        rs = session.execute(
+            """\
+            select n.nspname as enum_schema,  
+                    t.typname as enum_name,  
+                    array_agg(e.enumlabel) as enum_values
+            from pg_type t 
+                join pg_enum e on t.oid = e.enumtypid  
+                join pg_catalog.pg_namespace n ON n.oid = t.typnamespace
+            group by enum_schema,enum_name;
+            """
             )
-        )
-        session.commit()
 
-        # Create new enum type in db
-        enum_obj.create(session.get_bind())
+        for row in rs:
+            self.logger.exception(row)
 
-        # Update column to use new enum type
-        session.execute(
-            'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING {}::text::{};'.format(
-                table_name, column_name, enum_name, column_name, enum_name
-            )
-        )
+        
+        # session.execute(
+        #     'ALTER TYPE {} RENAME TO {};'.format(
+        #         enum_name, tmp_enum_name
+        #     )
+        # )
+        # # DROP TYPE IF EXISTS
+        # # Create new enum type in db
+        # enum_obj.create(session.get_bind(), checkfirst=True)
+
+        # # Update column to use new enum type
+        # session.execute(
+        #     'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING {}::text::{};'.format(
+        #         table_name, column_name, enum_name, column_name, enum_name
+        #     )
+        # )
     
-        # Drop old enum type
-        session.execute('DROP TYPE ' + tmp_enum_name)
-        session.commit()
+        # # Drop old enum type
+        # session.execute('DROP TYPE ' + tmp_enum_name)
+        # session.commit()
 
-def change_column_type(table_name, column_name, driver, column_type):
-    with driver.session as session:
-        # Update column to use new type
-        session.execute(
-            'ALTER TABLE {} ALTER COLUMN {} TYPE {};'.format(
-                table_name, column_name, column_type
-            )
-        )
-        session.commit()
 
+
+        # APPROACH 2
+        # DO $$
+        # BEGIN
+        #     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'my_type') THEN
+        #         CREATE TYPE my_type AS
+        #         (
+        #             --my fields here...
+        #         );
+        #     END IF;
+        #     --more types here...
+        # END$$;
+
+
+def change_column_type_if_exist(table_name, column_name, driver, column_type, metadata):
+    table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
+    if str(column_name) not in table.c:    
+        print("ERROR: Column {} not in table {} - can't change the column type".format(column_name, table_name))
+        return
+
+    for c in table.c:
+        if c.name == column_name and c.type != column_type:
+            with driver.session as session:
+                # Update column to use new type
+                session.execute(
+                    'ALTER TABLE {} ALTER COLUMN {} TYPE {};'.format(
+                        table_name, column_name, column_type
+                    )
+                )
+                session.commit()
+        
 def add_foreign_key_column_if_not_exist(
     table_name,
     column_name,
@@ -268,3 +308,6 @@ def drop_foreign_key_constraint_if_exist(table_name, column_name, driver, metada
                     )
                 )
                 session.commit()
+
+
+
