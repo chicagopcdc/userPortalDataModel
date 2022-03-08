@@ -178,10 +178,9 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
         # for row in rs:
         #     print(row)
 
-        print(rs)
-        print(rs[0])
-        print(enum_obj)
+        
         print(rs[0][0])
+        print([e.value for e in enum_obj])
 
 
         # session.execute(
