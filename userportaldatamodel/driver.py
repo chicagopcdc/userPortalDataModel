@@ -175,34 +175,37 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
             """.format('filtersourcetype')
             ).fetchall()
 
-        # for row in rs:
-        #     print(row)
+        # check it is different for the current one
+        # print(rs[0][0])
+        # print([e.value for e in FilterSourceType])
+        db_value = rs[0][0]
+        new_value = [e.value for e in FilterSourceType]
 
+        db_value.sort()
+        new_value.sort()
+
+        if db_value == new_value: 
+            print ("The Enum is already up to date. skip.") 
+        else:
+            session.execute(
+                'ALTER TYPE {} RENAME TO {};'.format(
+                    enum_name, tmp_enum_name
+                )
+            )
+            # DROP TYPE IF EXISTS
+            # Create new enum type in db
+            enum_obj.create(session.get_bind(), checkfirst=True)
+
+            # Update column to use new enum type
+            session.execute(
+                'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING {}::text::{};'.format(
+                    table_name, column_name, enum_name, column_name, enum_name
+                )
+            )
         
-        print(rs[0][0])
-        print([e.value for e in FilterSourceType])
-        print(FilterSourceType.__members__.values())
-
-
-        # session.execute(
-        #     'ALTER TYPE {} RENAME TO {};'.format(
-        #         enum_name, tmp_enum_name
-        #     )
-        # )
-        # # DROP TYPE IF EXISTS
-        # # Create new enum type in db
-        # enum_obj.create(session.get_bind(), checkfirst=True)
-
-        # # Update column to use new enum type
-        # session.execute(
-        #     'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING {}::text::{};'.format(
-        #         table_name, column_name, enum_name, column_name, enum_name
-        #     )
-        # )
-    
-        # # Drop old enum type
-        # session.execute('DROP TYPE ' + tmp_enum_name)
-        # session.commit()
+            # Drop old enum type
+            session.execute('DROP TYPE ' + tmp_enum_name)
+            session.commit()
 
 
 
