@@ -173,11 +173,12 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
             where t.typname = '{}'
             group by n.nspname, t.typname;
             """.format('filtersourcetype')
-            )
+            ).fetchall()
 
         # for row in rs:
         #     print(row)
 
+        print(rs)
         print(rs[0])
         print(enum_obj)
         print(rs[0][0])
