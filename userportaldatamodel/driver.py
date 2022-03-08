@@ -136,7 +136,7 @@ class SQLAlchemyDriver(object):
                 table_name=Search.__tablename__, 
                 column_name="filter_source", 
                 driver=self,
-                enum_obj=Enum(FilterSourceType),
+                enum_obj=FilterSourceType,
                 enum_name="filtersourcetype"
             )
         change_column_type_if_exist(
@@ -172,20 +172,20 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
                 join pg_catalog.pg_namespace n ON n.oid = t.typnamespace
             where t.typname = '{}'
             group by n.nspname, t.typname;
-            """.format('filtersourcetype')
+            """.format(enum_name)
             ).fetchall()
 
         # check it is different for the current one
         # print(rs[0][0])
         # print([e.value for e in FilterSourceType])
         db_value = rs[0][0]
-        new_value = [e.value for e in FilterSourceType]
+        new_value = [e.value for e in enum_obj]
 
         db_value.sort()
         new_value.sort()
 
         if db_value == new_value: 
-            print ("The Enum is already up to date. skip.") 
+            print ("The Enum {} is already up to date. skip.".format(enum_name)) 
         else:
             session.execute(
                 'ALTER TYPE {} RENAME TO {};'.format(
@@ -194,7 +194,7 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
             )
             # DROP TYPE IF EXISTS
             # Create new enum type in db
-            enum_obj.create(session.get_bind(), checkfirst=True)
+            Enum(enum_obj).create(session.get_bind(), checkfirst=True)
 
             # Update column to use new enum type
             session.execute(
@@ -206,8 +206,6 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
             # Drop old enum type
             session.execute('DROP TYPE ' + tmp_enum_name)
             session.commit()
-
-
 
         # APPROACH 2
         # DO $$
