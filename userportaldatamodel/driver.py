@@ -163,22 +163,22 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
     with driver.session as session:
         # Rename current enum type to tmp_
         # APPROACH 1
+
         rs = session.execute(
             """\
-            select n.nspname as enum_schema,  
-                    t.typname as enum_name,  
-                    array_agg(e.enumlabel) as enum_values
+            select array_agg(e.enumlabel) as enum_values
             from pg_type t 
                 join pg_enum e on t.oid = e.enumtypid  
                 join pg_catalog.pg_namespace n ON n.oid = t.typnamespace
-            group by enum_schema,enum_name;
-            """
+            where t.typname = '{}'
+            group by n.nspname, t.typname;
+            """.format('filtersourcetype')
             )
 
         for row in rs:
-            self.logger.exception(row)
+            print(row)
 
-        
+
         # session.execute(
         #     'ALTER TYPE {} RENAME TO {};'.format(
         #         enum_name, tmp_enum_name
