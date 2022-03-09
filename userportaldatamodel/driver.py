@@ -161,15 +161,60 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
     enum_name = enum_name
     tmp_enum_name = "tmp_" + enum_name
     with driver.session as session:
-        # Rename current enum type to tmp_
+        # SHOULD work on PSQL >= 12 TODO test it
+        # rs = session.execute(
+        #         """\
+        #         select array_agg(e.enumlabel) as enum_values
+        #         from pg_type t 
+        #             join pg_enum e on t.oid = e.enumtypid  
+        #             join pg_catalog.pg_namespace n ON n.oid = t.typnamespace
+        #         where t.typname = '{}'
+        #         group by n.nspname, t.typname;
+        #         """.format(enum_name)
+        #     ).fetchall()
+
+        # db_value = rs[0][0]
+        # new_value = [e.value for e in enum_obj]
+
+        # db_value.sort()
+        # new_value.sort()
+
+        # if db_value == new_value: 
+        #     print ("The Enum {} is already up to date. skip.".format(enum_name)) 
+        # else:
+        #     for value in new_value:
+        #         if value not in db_value:
+        #             session.execute(
+        #                 """\
+        #                 ALTER TYPE {} ADD VALUE '{}';
+        #                 """.format(enum_name, value)
+        #             )
+
+
+
+        # WORKAROUND FOr ABOVE 
+        # for value in new_value:
+        #         if value not in db_value:
+        #             session.execute(
+        #                 """\
+        #                 INSERT INTO pg_enum (enumtypid, enumlabel, enumsortorder)
+        #                     SELECT 'type_egais_units'::regtype::oid, 'NEW_ENUM_VALUE', ( SELECT MAX(enumsortorder) + 1 FROM pg_enum WHERE enumtypid = 'type_egais_units'::regtype )
+        #                 """.format(enum_name, value)
+        #             )
+
+
+
+
+        # PREVIOUS VERSIONS
         # APPROACH 1
 
-        # session.execute(
-        #     """\
-        #     BEGIN;
-        #     LOCK TABLE {} IN ACCESS EXCLUSIVE MODE;
-        #     """.format(table_name)
-        # )
+        session.execute(
+            """\
+            BEGIN;
+            LOCK TABLE {} IN ACCESS EXCLUSIVE MODE;
+            select 1 from {};
+            """.format(table_name, table_name)
+        )
 
         rs = session.execute(
                 """\
@@ -182,9 +227,6 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
                 """.format(enum_name)
             ).fetchall()
 
-        # check it is different for the current one
-        # print(rs[0][0])
-        # print([e.value for e in FilterSourceType])
         db_value = rs[0][0]
         new_value = [e.value for e in enum_obj]
 
@@ -193,11 +235,11 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
 
         if db_value == new_value: 
             print ("The Enum {} is already up to date. skip.".format(enum_name)) 
-            # session.execute(
-            #     """\
-            #     COMMIT WORK;
-            #     """
-            # )
+            session.execute(
+                """\
+                COMMIT WORK;
+                """
+            )
         else:
             # CHECK FOR LOCK
             # rs = session.execute(
@@ -208,39 +250,32 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
             #         """.format(table_name)
             #     ).fetchall()
 
-            for value in new_value:
-                if value not in db_value:
-                    session.execute(
-                        """\
-                        ALTER TYPE {} ADD VALUE '{}';
-                        """.format(enum_name, value)
-                    )
 
-            # session.execute(
-            #     """\
-            #     COMMIT WORK;
-            #     """
-            # )
+            session.execute(
+                'ALTER TYPE {} RENAME TO {};'.format(
+                    enum_name, tmp_enum_name
+                )
+            )
+            # DROP TYPE IF EXISTS
+            # Create new enum type in db
+            Enum(enum_obj).create(session.get_bind(), checkfirst=True)
 
-            # session.execute(
-            #     'ALTER TYPE {} RENAME TO {};'.format(
-            #         enum_name, tmp_enum_name
-            #     )
-            # )
-            # # DROP TYPE IF EXISTS
-            # # Create new enum type in db
-            # Enum(enum_obj).create(session.get_bind(), checkfirst=True)
-
-            # # Update column to use new enum type
-            # session.execute(
-            #     'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING {}::text::{};'.format(
-            #         table_name, column_name, enum_name, column_name, enum_name
-            #     )
-            # )
+            session.execute(
+                """\
+                COMMIT WORK;
+                """
+            )
+            
+            # Update column to use new enum type
+            session.execute(
+                'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING ({}::text::{});'.format(
+                    table_name, column_name, enum_name, column_name, enum_name
+                )
+            )
         
-            # # Drop old enum type
-            # session.execute('DROP TYPE ' + tmp_enum_name)
-            # # session.commit()
+            # Drop old enum type
+            session.execute('DROP TYPE ' + tmp_enum_name)
+            # session.commit()
             # session.execute(
             #     """\
             #     COMMIT WORK;
