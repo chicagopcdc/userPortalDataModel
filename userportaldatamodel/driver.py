@@ -215,15 +215,6 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
                 if value not in db_value:
                     session.execute(
                         """\
-                        ALTER TYPE {} ADD VALUE '{}';
-                        """.format(enum_name, value)
-                    )
-
-
-            for value in new_value:
-                if value not in db_value:
-                    session.execute(
-                        """\
                         INSERT INTO pg_enum (enumtypid, enumlabel, enumsortorder)
                             SELECT '{}'::regtype::oid, '{}', ( SELECT MAX(enumsortorder) + 1 FROM pg_enum WHERE enumtypid = '{}'::regtype )
                         """.format(enum_name, value, enum_name)
