@@ -164,15 +164,22 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
         # Rename current enum type to tmp_
         # APPROACH 1
 
-        rs = session.execute(
+        session.execute(
             """\
-            select array_agg(e.enumlabel) as enum_values
-            from pg_type t 
-                join pg_enum e on t.oid = e.enumtypid  
-                join pg_catalog.pg_namespace n ON n.oid = t.typnamespace
-            where t.typname = '{}'
-            group by n.nspname, t.typname;
-            """.format(enum_name)
+            BEGIN;
+            LOCK TABLE {} IN ACCESS EXCLUSIVE MODE;
+            """.format(table_name)
+        )
+
+        rs = session.execute(
+                """\
+                select array_agg(e.enumlabel) as enum_values
+                from pg_type t 
+                    join pg_enum e on t.oid = e.enumtypid  
+                    join pg_catalog.pg_namespace n ON n.oid = t.typnamespace
+                where t.typname = '{}'
+                group by n.nspname, t.typname;
+                """.format(enum_name)
             ).fetchall()
 
         # check it is different for the current one
@@ -186,7 +193,21 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
 
         if db_value == new_value: 
             print ("The Enum {} is already up to date. skip.".format(enum_name)) 
+            session.execute(
+                """\
+                COMMIT WORK;
+                """
+            )
         else:
+            # CHECK FOR LOCK
+            # rs = session.execute(
+            #         """\
+            #         select * from pg_locks l
+            #         join pg_class t on l.relation = t.oid
+            #         where t.relname = {};
+            #         """.format(table_name)
+            #     ).fetchall()
+
             session.execute(
                 'ALTER TYPE {} RENAME TO {};'.format(
                     enum_name, tmp_enum_name
@@ -205,7 +226,12 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
         
             # Drop old enum type
             session.execute('DROP TYPE ' + tmp_enum_name)
-            session.commit()
+            # session.commit()
+            session.execute(
+                """\
+                COMMIT WORK;
+                """
+            )
 
         # APPROACH 2
         # DO $$
