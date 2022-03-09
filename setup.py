@@ -20,7 +20,7 @@ def get_version():
 
 setup(
     name="userportaldatamodel",
-    version="2.0.9", # get_version(),
+    version="2.0.10", # get_version(),
     packages=find_packages(),
     install_requires=["sqlalchemy~=1.3.3", "cdislogging", "marshmallow-sqlalchemy", "marshmallow_enum"],
     scripts=["bin/userportaldatamodel-init"],

@@ -208,30 +208,44 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
             #         """.format(table_name)
             #     ).fetchall()
 
-            session.execute(
-                'ALTER TYPE {} RENAME TO {};'.format(
-                    enum_name, tmp_enum_name
-                )
-            )
-            # DROP TYPE IF EXISTS
-            # Create new enum type in db
-            Enum(enum_obj).create(session.get_bind(), checkfirst=True)
+            for value in new_value:
+                if value not in db_value:
+                    session.execute(
+                        """\
+                        ALTER TYPE {} ADD VALUE '{}';
+                        """.format(enum_name, value)
+                    )
 
-            # Update column to use new enum type
-            session.execute(
-                'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING {}::text::{};'.format(
-                    table_name, column_name, enum_name, column_name, enum_name
-                )
-            )
-        
-            # Drop old enum type
-            session.execute('DROP TYPE ' + tmp_enum_name)
-            # session.commit()
             session.execute(
                 """\
                 COMMIT WORK;
                 """
             )
+
+            # session.execute(
+            #     'ALTER TYPE {} RENAME TO {};'.format(
+            #         enum_name, tmp_enum_name
+            #     )
+            # )
+            # # DROP TYPE IF EXISTS
+            # # Create new enum type in db
+            # Enum(enum_obj).create(session.get_bind(), checkfirst=True)
+
+            # # Update column to use new enum type
+            # session.execute(
+            #     'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING {}::text::{};'.format(
+            #         table_name, column_name, enum_name, column_name, enum_name
+            #     )
+            # )
+        
+            # # Drop old enum type
+            # session.execute('DROP TYPE ' + tmp_enum_name)
+            # # session.commit()
+            # session.execute(
+            #     """\
+            #     COMMIT WORK;
+            #     """
+            # )
 
         # APPROACH 2
         # DO $$
