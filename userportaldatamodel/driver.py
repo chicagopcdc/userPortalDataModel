@@ -190,32 +190,7 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
         #                 """.format(enum_name, value)
         #             )
 
-
-
-        # WORKAROUND FOr ABOVE 
-        # for value in new_value:
-        #         if value not in db_value:
-        #             session.execute(
-        #                 """\
-        #                 INSERT INTO pg_enum (enumtypid, enumlabel, enumsortorder)
-        #                     SELECT 'type_egais_units'::regtype::oid, 'NEW_ENUM_VALUE', ( SELECT MAX(enumsortorder) + 1 FROM pg_enum WHERE enumtypid = 'type_egais_units'::regtype )
-        #                 """.format(enum_name, value)
-        #             )
-
-
-
-
-        # PREVIOUS VERSIONS
-        # APPROACH 1
-
-        session.execute(
-            """\
-            BEGIN;
-            LOCK TABLE {} IN ACCESS EXCLUSIVE MODE;
-            select 1 from {};
-            """.format(table_name, table_name)
-        )
-
+        # WORKAROUND FOr ABOVE  for lower version of psql
         rs = session.execute(
                 """\
                 select array_agg(e.enumlabel) as enum_values
@@ -235,52 +210,105 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
 
         if db_value == new_value: 
             print ("The Enum {} is already up to date. skip.".format(enum_name)) 
-            session.execute(
-                """\
-                COMMIT WORK;
-                """
-            )
         else:
-            # CHECK FOR LOCK
-            # rs = session.execute(
-            #         """\
-            #         select * from pg_locks l
-            #         join pg_class t on l.relation = t.oid
-            #         where t.relname = {};
-            #         """.format(table_name)
-            #     ).fetchall()
+            for value in new_value:
+                if value not in db_value:
+                    session.execute(
+                        """\
+                        ALTER TYPE {} ADD VALUE '{}';
+                        """.format(enum_name, value)
+                    )
 
 
-            session.execute(
-                'ALTER TYPE {} RENAME TO {};'.format(
-                    enum_name, tmp_enum_name
-                )
-            )
-            # DROP TYPE IF EXISTS
-            # Create new enum type in db
-            Enum(enum_obj).create(session.get_bind(), checkfirst=True)
+            for value in new_value:
+                if value not in db_value:
+                    session.execute(
+                        """\
+                        INSERT INTO pg_enum (enumtypid, enumlabel, enumsortorder)
+                            SELECT '{}'::regtype::oid, '{}', ( SELECT MAX(enumsortorder) + 1 FROM pg_enum WHERE enumtypid = '{}'::regtype )
+                        """.format(enum_name, value, enum_name)
+                    )
 
-            session.execute(
-                """\
-                COMMIT WORK;
-                """
-            )
-            
-            # Update column to use new enum type
-            session.execute(
-                'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING ({}::text::{});'.format(
-                    table_name, column_name, enum_name, column_name, enum_name
-                )
-            )
+
+
+
+        # PREVIOUS VERSIONS
+        # APPROACH 1
+
+        # session.execute(
+        #     """\
+        #     BEGIN;
+        #     LOCK TABLE {} IN ACCESS EXCLUSIVE MODE;
+        #     select 1 from {};
+        #     """.format(table_name, table_name)
+        # )
+
+        # rs = session.execute(
+        #         """\
+        #         select array_agg(e.enumlabel) as enum_values
+        #         from pg_type t 
+        #             join pg_enum e on t.oid = e.enumtypid  
+        #             join pg_catalog.pg_namespace n ON n.oid = t.typnamespace
+        #         where t.typname = '{}'
+        #         group by n.nspname, t.typname;
+        #         """.format(enum_name)
+        #     ).fetchall()
+
+        # print(rs)
+        # db_value = rs[0][0]
+        # new_value = [e.value for e in enum_obj]
+
+        # db_value.sort()
+        # new_value.sort()
+
+        # if db_value == new_value: 
+        #     print ("The Enum {} is already up to date. skip.".format(enum_name)) 
+        #     session.execute(
+        #         """\
+        #         COMMIT WORK;
+        #         """
+        #     )
+        # else:
+        #     # CHECK FOR LOCK
+        #     # rs = session.execute(
+        #     #         """\
+        #     #         select * from pg_locks l
+        #     #         join pg_class t on l.relation = t.oid
+        #     #         where t.relname = {};
+        #     #         """.format(table_name)
+        #     #     ).fetchall()
+
+
+        #     session.execute(
+        #         'ALTER TYPE {} RENAME TO {};'.format(
+        #             enum_name, tmp_enum_name
+        #         )
+        #     )
+        #     # DROP TYPE IF EXISTS
+        #     # Create new enum type in db
+        #     Enum(enum_obj).create(session.get_bind(), checkfirst=True)
+
+        #     session.execute(
+        #         """\
+        #         COMMIT WORK;
+        #         """
+        #     )
+
+        #     # Update column to use new enum type
+        #     session.execute(
+        #         'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING ({}::text::{});'.format(
+        #             table_name, column_name, enum_name, column_name, enum_name
+        #         )
+        #     )
         
-            # Drop old enum type
-            session.execute('DROP TYPE ' + tmp_enum_name)
-            # session.commit()
-            # session.execute(
-            #     """\
-            #     COMMIT WORK;
-            #     """
-            # )
+        #     # Drop old enum type
+        #     session.execute('DROP TYPE ' + tmp_enum_name)
+        #     # session.commit()
+        #     # session.execute(
+        #     #     """\
+        #     #     COMMIT WORK;
+        #     #     """
+        #     # )
 
         #ALTER TABLE table_name
         #     ALTER COLUMN column_name TYPE VARCHAR(255);
