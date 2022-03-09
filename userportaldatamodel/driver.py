@@ -164,12 +164,12 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
         # Rename current enum type to tmp_
         # APPROACH 1
 
-        session.execute(
-            """\
-            BEGIN;
-            LOCK TABLE {} IN ACCESS EXCLUSIVE MODE;
-            """.format(table_name)
-        )
+        # session.execute(
+        #     """\
+        #     BEGIN;
+        #     LOCK TABLE {} IN ACCESS EXCLUSIVE MODE;
+        #     """.format(table_name)
+        # )
 
         rs = session.execute(
                 """\
@@ -193,11 +193,11 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
 
         if db_value == new_value: 
             print ("The Enum {} is already up to date. skip.".format(enum_name)) 
-            session.execute(
-                """\
-                COMMIT WORK;
-                """
-            )
+            # session.execute(
+            #     """\
+            #     COMMIT WORK;
+            #     """
+            # )
         else:
             # CHECK FOR LOCK
             # rs = session.execute(
@@ -216,11 +216,11 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
                         """.format(enum_name, value)
                     )
 
-            session.execute(
-                """\
-                COMMIT WORK;
-                """
-            )
+            # session.execute(
+            #     """\
+            #     COMMIT WORK;
+            #     """
+            # )
 
             # session.execute(
             #     'ALTER TYPE {} RENAME TO {};'.format(
@@ -246,6 +246,21 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
             #     COMMIT WORK;
             #     """
             # )
+
+        #ALTER TABLE table_name
+        #     ALTER COLUMN column_name TYPE VARCHAR(255);
+        # Drop and create again request_type enum:
+        # DROP TYPE IF EXISTS request_type;
+        # CREATE TYPE request_type AS ENUM (
+        #     'OLD_VALUE_1',
+        #     'OLD_VALUE_2',
+        #     'NEW_VALUE_1',
+        #     'NEW_VALUE_2'
+        # );
+        # Revert type from varchar to request_type for all columns/tables (revert step one):
+        # ALTER TABLE table_name
+        #     ALTER COLUMN column_name TYPE request_type
+        #     USING (column_name::request_type);
 
         # APPROACH 2
         # DO $$
