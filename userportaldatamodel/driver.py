@@ -190,7 +190,7 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
         #                 """.format(enum_name, value)
         #             )
 
-        # WORKAROUND FOr ABOVE  for lower version of psql
+        # WORKAROUND for lower version of psql < 12
         rs = session.execute(
                 """\
                 select array_agg(e.enumlabel) as enum_values
@@ -222,10 +222,7 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
 
 
 
-
-        # PREVIOUS VERSIONS
-        # APPROACH 1
-
+        # TODO the above handle addition of new value in the enum, but not removal, need to improve the following to handle deletion
         # session.execute(
         #     """\
         #     BEGIN;
