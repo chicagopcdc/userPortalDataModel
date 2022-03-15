@@ -143,7 +143,7 @@ class SQLAlchemyDriver(object):
                 table_name=Search.__tablename__, 
                 column_name="ids_list", 
                 driver=self, 
-                column_type="text",
+                column_type="text[]",
                 metadata=md
             )
 
