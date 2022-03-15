@@ -1,6 +1,7 @@
 from .message_schema import MessageSchema
 from .receiver_schema import ReceiverSchema
 from .search_schema import SearchSchema
+from .state_schema import StateSchema
 from .project_schema import ProjectSchema
 from .request_schema import RequestSchema
 from .attributes_schema import AttributesSchema
