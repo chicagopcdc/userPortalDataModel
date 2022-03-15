@@ -51,7 +51,7 @@ class ConsortiumDataContributor(Base):
             "id": self.id,
             "name": self.name,
             "code": self.code,
-            "updated_at": self.updated_at
+            "update_date": self.update_date
         }
         return json.dumps(str_out)
 
