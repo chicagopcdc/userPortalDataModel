@@ -139,7 +139,7 @@ class SQLAlchemyDriver(object):
                 enum_obj=FilterSourceType,
                 enum_name="filtersourcetype"
             )
-        change_column_type_if_exist(
+        change_column_type_if_exist_using(
                 table_name=Search.__tablename__, 
                 column_name="ids_list", 
                 driver=self, 
@@ -339,6 +339,23 @@ def change_column_type_if_exist(table_name, column_name, driver, column_type, me
                 session.execute(
                     'ALTER TABLE {} ALTER COLUMN {} TYPE {};'.format(
                         table_name, column_name, column_type
+                    )
+                )
+                session.commit()
+
+def change_column_type_if_exist_using(table_name, column_name, driver, column_type, metadata):
+    table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
+    if str(column_name) not in table.c:    
+        print("ERROR: Column {} not in table {} - can't change the column type".format(column_name, table_name))
+        return
+
+    for c in table.c:
+        if c.name == column_name and c.type != column_type:
+            with driver.session as session:
+                # Update column to use new type
+                session.execute(
+                    'ALTER TABLE {} ALTER COLUMN {} TYPE {} USING {}::{};'.format(
+                        table_name, column_name, column_type, column_name, column_type
                     )
                 )
                 session.commit()
