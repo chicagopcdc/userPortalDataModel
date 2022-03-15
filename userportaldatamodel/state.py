@@ -52,7 +52,8 @@ class State(Base):
     def __str__(self):
         str_out = {
             "id": self.id,
-            "name": self.name
+            "name": self.name,
+            "code": self.code
         }
         return json.dumps(str_out)
 
