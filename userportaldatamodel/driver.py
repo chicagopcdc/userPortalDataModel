@@ -455,8 +455,13 @@ def add_unique_constraint_if_not_exist(table_name, column_name, driver, metadata
     table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
     index_name = "{}_{}_key".format(table_name, column_name)
 
+    print("CONSTRAINT LUCA")
+    print(index_name)
+
     if column_name in table.c:
         indexes = [index.name for index in table.indexes]
+        print(column_name)
+        print(indexes)
 
         if index_name not in indexes:
             with driver.session as session:
