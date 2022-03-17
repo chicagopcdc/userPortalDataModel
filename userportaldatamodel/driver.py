@@ -147,6 +147,19 @@ class SQLAlchemyDriver(object):
                 metadata=md
             )
 
+        add_unique_constraint_if_not_exist(
+                table_name=State.__tablename__, 
+                column_name="code", 
+                driver=self, 
+                metadata=md
+            )
+        add_unique_constraint_if_not_exist(
+                table_name=ConsortiumDataContributor.__tablename__, 
+                column_name="code", 
+                driver=self, 
+                metadata=md
+            )
+
 
         # col_names = ["filter_souce", "filter_souce_internal_id"]
         # for col in col_names:
@@ -437,6 +450,29 @@ def drop_foreign_key_constraint_if_exist(table_name, column_name, driver, metada
                     )
                 )
                 session.commit()
+
+def add_unique_constraint_if_not_exist(table_name, column_name, driver, metadata):
+    table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
+    index_name = "{}_{}_key".format(table_name, column_name)
+
+    if column_name in table.c:
+        indexes = [index.name for index in table.indexes]
+
+        if index_name not in indexes:
+            with driver.session as session:
+                session.execute(
+                    'ALTER TABLE "{}" ADD CONSTRAINT {} UNIQUE ({});'.format(
+                        table_name, index_name, column_name
+                    )
+                )
+                session.commit()
+
+
+
+
+
+
+
 
 
 

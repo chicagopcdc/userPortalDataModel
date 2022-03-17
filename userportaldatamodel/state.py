@@ -43,7 +43,7 @@ class State(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     name = Column(String)
-    code = Column(String)
+    code = Column(String, unique=True)
 
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
