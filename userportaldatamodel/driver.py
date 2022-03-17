@@ -459,9 +459,9 @@ def add_unique_constraint_if_not_exist(table_name, column_name, driver, metadata
     print(index_name)
 
     if column_name in table.c:
-        indexes = [index.name for index in table.indexes]
+        indexes = [index.name for index in table.constraints]
         print(table)
-        print(table.indexes)
+        print(table.constraints)
         print(column_name)
         print(indexes)
 
