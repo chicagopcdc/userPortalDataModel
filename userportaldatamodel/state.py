@@ -43,7 +43,7 @@ class State(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     name = Column(String)
-    code = Column(String)
+    code = Column(String, unique=True)
 
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
@@ -52,7 +52,8 @@ class State(Base):
     def __str__(self):
         str_out = {
             "id": self.id,
-            "name": self.name
+            "name": self.name,
+            "code": self.code
         }
         return json.dumps(str_out)
 

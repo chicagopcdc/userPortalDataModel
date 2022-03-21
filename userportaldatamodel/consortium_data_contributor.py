@@ -38,8 +38,14 @@ import json
 class ConsortiumDataContributor(Base):
     __tablename__ = "consortium_data_contributor"
 
+    # __table_args__ = (
+    #     db.UniqueConstraint('component_id', 'commit_id', name='unique_component_commit'),
+    # )
+    # UniqueConstraint('col2', 'col3', name='uix_1')
+    # )
+
     id = Column(Integer, primary_key=True, autoincrement=True)
-    code = Column(String)
+    code = Column(String, unique=True)
     name = Column(String)
     
     create_date = Column(DateTime(timezone=False), server_default=func.now())
@@ -51,7 +57,7 @@ class ConsortiumDataContributor(Base):
             "id": self.id,
             "name": self.name,
             "code": self.code,
-            "updated_at": self.updated_at
+            "update_date": self.update_date
         }
         return json.dumps(str_out)
 
