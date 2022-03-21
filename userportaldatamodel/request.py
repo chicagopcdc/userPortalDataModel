@@ -34,6 +34,8 @@ class Request(Base):
 
     consortium_data_contributor_id = Column(Integer, ForeignKey("consortium_data_contributor.id"))
     consortium_data_contributor = relationship("ConsortiumDataContributor", backref="requests")
+
+    states = relationship('State', secondary = 'request_has_state')
     
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())

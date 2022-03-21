@@ -10,7 +10,7 @@ from .receiver import Receiver
 from .request import Request
 from .consortium_data_contributor import ConsortiumDataContributor
 from .search import Search, ProjectSearch, FilterSourceType
-# from .state import State, RequestState
+from .state import State, RequestState
 # from .transition import Transition
 
 
