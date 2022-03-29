@@ -40,6 +40,7 @@ class Project(Base):
     institution = Column(String)
     description = Column(String)
 
+    statistician_ids = Column(ARRAY(Integer), nullable=False)
     approved_url = Column(String, nullable=True, default=None)
 
     active = Column(Boolean, default=True)
