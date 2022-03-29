@@ -25,7 +25,7 @@ class Statistician(Base):
     
     email = Column(Text, nullable=True)
 
-    # projects = relationship("Project", secondary="statistician_in_project")
+    projects = relationship("Project", secondary="project_has_statistician")
     
     active = Column(Boolean, default=True)
     create_date = Column(DateTime(timezone=False), server_default=func.now())
@@ -50,7 +50,7 @@ class ProjectStatistician(Base):
     __tablename__ = "project_has_statistician"
 
     project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
-    project = relationship("Project", backref=backref("statistician_in_project"))
+    project = relationship("Project", backref=backref("project_has_statistician"))
 
     statistician_id = Column(Integer, ForeignKey("statistician.id"), primary_key=True)
     statistician = relationship("Statistician", backref=backref("project_has_statistician"))
