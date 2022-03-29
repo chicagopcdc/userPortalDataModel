@@ -15,6 +15,20 @@ from sqlalchemy.schema import ForeignKey
 from sqlalchemy.orm import relationship, backref
 
 
+class ProjectStatistician(Base):
+    __tablename__ = "project_has_statistician"
+
+    project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
+    project = relationship("Project", backref=backref("statistician_in_project"))
+
+    statistician_id = Column(Integer, ForeignKey("statistician.id"), primary_key=True)
+    statistician = relationship("Statistician", backref=backref("project_has_statistician"))
+
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
+
+
+
 class Statistician(Base):
     __tablename__ = "statistician"
 
@@ -25,7 +39,7 @@ class Statistician(Base):
     
     email = Column(Text, nullable=True)
 
-    projects = relationship("Project", secondary="project_has_statistician")
+    projects = relationship("Project", secondary="statistician_in_project")
     
     active = Column(Boolean, default=True)
     create_date = Column(DateTime(timezone=False), server_default=func.now())
@@ -44,19 +58,7 @@ class Statistician(Base):
 
     def __repr__(self):
         return self.__str__()
-        
 
-class ProjectStatistician(Base):
-    __tablename__ = "project_has_statistician"
-
-    project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
-    project = relationship("Project", backref=backref("search_in_project"))
-
-    statistician_id = Column(Integer, ForeignKey("statistician.id"), primary_key=True)
-    statistician = relationship("Statistician", backref=backref("project_has_statistician"))
-
-    create_date = Column(DateTime(timezone=False), server_default=func.now())
-    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
 
 
 
