@@ -17,3 +17,4 @@ class StatisticianSchema(SQLAlchemyAutoSchema):
 
     class Meta:
         model = Statistician
+
