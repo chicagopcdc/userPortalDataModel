@@ -85,12 +85,12 @@ class SQLAlchemyDriver(object):
             )
             return
 
-        if not self.engine.dialect.has_table(
-            self.engine, "Group"
-        ) and self.engine.dialect.has_table(self.engine, "research_group"):
-            print("Altering table research_group to group")
-            with self.session as session:
-                session.execute('ALTER TABLE research_group rename to "Group"')
+        # if not self.engine.dialect.has_table(
+        #     self.engine, "Group"
+        # ) and self.engine.dialect.has_table(self.engine, "research_group"):
+        #     print("Altering table research_group to group")
+        #     with self.session as session:
+        #         session.execute('ALTER TABLE research_group rename to "Group"')
 
     def post_migrate(self):
         md = MetaData()
