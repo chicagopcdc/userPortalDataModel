@@ -11,6 +11,7 @@ from .request import Request
 from .consortium_data_contributor import ConsortiumDataContributor
 from .search import Search, ProjectSearch, FilterSourceType
 from .state import State, RequestState
+from .statistician import Statistician, ProjectStatistician
 # from .transition import Transition
 
 
