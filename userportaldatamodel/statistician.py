@@ -25,7 +25,7 @@ class Statistician(Base):
     
     email = Column(Text, nullable=True)
 
-    # projects = relationship("Project", secondary="statistician_in_project")
+    projects = relationship("Project", secondary="statistician_in_project")
     
     active = Column(Boolean, default=True)
     create_date = Column(DateTime(timezone=False), server_default=func.now())
