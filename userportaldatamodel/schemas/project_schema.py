@@ -7,6 +7,7 @@ from userportaldatamodel.models import Project
 class ProjectSchema(SQLAlchemyAutoSchema):
     searches = Nested('SearchSchema', many=True)
     requests = Nested('RequestSchema', many=True)
+    statisticians = Nested('StatisticianSchema', many=True)
 
     class Meta:
         model = Project
