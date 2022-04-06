@@ -175,35 +175,6 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
     tmp_enum_name = "tmp_" + enum_name
     with driver.session as session:
         # SHOULD work on PSQL >= 12 TODO test it
-        # rs = session.execute(
-        #         """\
-        #         select array_agg(e.enumlabel) as enum_values
-        #         from pg_type t 
-        #             join pg_enum e on t.oid = e.enumtypid  
-        #             join pg_catalog.pg_namespace n ON n.oid = t.typnamespace
-        #         where t.typname = '{}'
-        #         group by n.nspname, t.typname;
-        #         """.format(enum_name)
-        #     ).fetchall()
-
-        # db_value = rs[0][0]
-        # new_value = [e.value for e in enum_obj]
-
-        # db_value.sort()
-        # new_value.sort()
-
-        # if db_value == new_value: 
-        #     print ("The Enum {} is already up to date. skip.".format(enum_name)) 
-        # else:
-        #     for value in new_value:
-        #         if value not in db_value:
-        #             session.execute(
-        #                 """\
-        #                 ALTER TYPE {} ADD VALUE '{}';
-        #                 """.format(enum_name, value)
-        #             )
-
-        # WORKAROUND for lower version of psql < 12
         rs = session.execute(
                 """\
                 select array_agg(e.enumlabel) as enum_values
@@ -228,10 +199,43 @@ def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_n
                 if value not in db_value:
                     session.execute(
                         """\
-                        INSERT INTO pg_enum (enumtypid, enumlabel, enumsortorder)
-                            SELECT '{}'::regtype::oid, '{}', ( SELECT MAX(enumsortorder) + 1 FROM pg_enum WHERE enumtypid = '{}'::regtype )
-                        """.format(enum_name, value, enum_name)
+                        ALTER TYPE {} ADD VALUE '{}';
+                        """.format(enum_name, value)
                     )
+
+        # # START WORKAROUND for lower version of psql < 12
+        # rs = session.execute(
+        #         """\
+        #         select array_agg(e.enumlabel) as enum_values
+        #         from pg_type t 
+        #             join pg_enum e on t.oid = e.enumtypid  
+        #             join pg_catalog.pg_namespace n ON n.oid = t.typnamespace
+        #         where t.typname = '{}'
+        #         group by n.nspname, t.typname;
+        #         """.format(enum_name)
+        #     ).fetchall()
+
+        # db_value = rs[0][0]
+        # new_value = [e.value for e in enum_obj]
+
+        # db_value.sort()
+        # new_value.sort()
+
+        # if db_value == new_value: 
+        #     print ("The Enum {} is already up to date. skip.".format(enum_name)) 
+        # else:
+        #     for value in new_value:
+        #         if value not in db_value:
+        #             session.execute(
+        #                 """\
+        #                 INSERT INTO pg_enum (enumtypid, enumlabel, enumsortorder)
+        #                     SELECT '{}'::regtype::oid, '{}', ( SELECT MAX(enumsortorder) + 1 FROM pg_enum WHERE enumtypid = '{}'::regtype )
+        #                 """.format(enum_name, value, enum_name)
+        #             )
+        # END
+
+
+
 
 
 
