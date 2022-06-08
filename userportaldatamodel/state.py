@@ -31,7 +31,7 @@ class RequestState(Base):
     state_id = Column(Integer, ForeignKey("state.id"), primary_key=True)
     state = relationship("State", backref=backref("request_has_state"))
 
-    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    create_date = Column(DateTime(timezone=False), server_default=func.now(), primary_key=True)
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
 
 
