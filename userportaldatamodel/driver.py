@@ -161,6 +161,13 @@ class SQLAlchemyDriver(object):
             )
 
 
+        add_primary_key_constraint_if_not_exist(
+                table_name=RequestState.__tablename__,
+                column_name="create_date",
+                driver=self,
+                metadata=md
+            )
+
         # col_names = ["filter_souce", "filter_souce_internal_id"]
         # for col in col_names:
         #     add_column_if_not_exist(
@@ -450,6 +457,45 @@ def drop_foreign_key_constraint_if_exist(table_name, column_name, driver, metada
                     )
                 )
                 session.commit()
+
+
+def add_primary_key_constraint_if_not_exist(table_name, column_name, driver, metadata):
+    '''
+    Add a primary key constraint to a column if it doesn't already exist.
+    '''
+    table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
+    primary_key_name = "{}_{}_pkey".format(table_name.lower(), column_name)
+
+    if column_name in table.c:
+        primary_keys = [fk.name for fk in getattr(table.c, column_name).primary_key]
+        if primary_key_name not in primary_keys:
+            with driver.session as session:
+                session.execute(
+                    'ALTER TABLE "{}" ADD CONSTRAINT {} PRIMARY KEY({});'.format(
+                        table_name, primary_key_name, column_name
+                    )
+                )
+                session.commit()
+
+
+def drop_primary_key_constraint(table_name, column_name, driver, metadata):
+    '''
+    Drop a primary key constraint from a column if it exists.
+    '''
+    table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
+    primary_key_name = "{}_{}_pkey".format(table_name.lower(), column_name)
+
+    if column_name in table.c:
+        primary_keys = [fk.name for fk in getattr(table.c, column_name).primary_key]
+        if primary_key_name in primary_keys:
+            with driver.session as session:
+                session.execute(
+                    'ALTER TABLE "{}" DROP CONSTRAINT {};'.format(
+                        table_name, primary_key_name
+                    )
+                )
+                session.commit()
+
 
 def add_unique_constraint_if_not_exist(table_name, column_name, driver, metadata):
     table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
