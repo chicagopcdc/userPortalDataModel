@@ -161,6 +161,19 @@ class SQLAlchemyDriver(object):
             )
 
 
+        drop_primary_key_constraint(
+                    table_name=RequestState.__tablename__,
+                    primary_key="request_has_state_pkey",
+                    driver=self
+            )
+
+
+        add_primary_key_constraint(
+                    table_name=RequestState.__tablename__,
+                    column_names=["request_id", "state_id", "create_date"],
+                    driver=self
+            )
+
         # col_names = ["filter_souce", "filter_souce_internal_id"]
         # for col in col_names:
         #     add_column_if_not_exist(
@@ -451,6 +464,7 @@ def drop_foreign_key_constraint_if_exist(table_name, column_name, driver, metada
                 )
                 session.commit()
 
+
 def add_unique_constraint_if_not_exist(table_name, column_name, driver, metadata):
     table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
     index_name = "{}_{}_key".format(table_name, column_name)
@@ -468,8 +482,26 @@ def add_unique_constraint_if_not_exist(table_name, column_name, driver, metadata
                 session.commit()
 
 
+def add_primary_key_constraint(table_name, column_names, driver):
+    '''
+    Add a primary key constraint to a column if it doesn't already exist.
+    '''
+    
+    with driver.engine.connect() as conn:
+        conn.execute(
+            f'ALTER TABLE "{table_name}" ADD CONSTRAINT "{table_name}_pkey" PRIMARY KEY ({", ".join(column_names)});'
+        )
 
 
+def drop_primary_key_constraint(table_name, primary_key, driver):
+    '''
+    Add a primary key constraint to a column if it doesn't already exist.
+    '''
+    
+    with driver.engine.connect() as conn:
+        conn.execute(
+            f'ALTER TABLE "{table_name}" DROP CONSTRAINT "{primary_key}";'
+        )
 
 
 
