@@ -118,7 +118,6 @@ class SQLAlchemyDriver(object):
                 driver=self,
                 metadata=md,
             )
-
         add_column_if_not_exist(
                 table_name=Project.__tablename__,
                 column=Column("name", String, nullable=True),
@@ -131,7 +130,7 @@ class SQLAlchemyDriver(object):
                 driver=self,
                 metadata=md,
             )
-
+        
         add_value_to_existing_enum(
                 table_name=Search.__tablename__, 
                 column_name="filter_source", 
@@ -139,6 +138,7 @@ class SQLAlchemyDriver(object):
                 enum_obj=FilterSourceType,
                 enum_name="filtersourcetype"
             )
+        
         change_column_type_if_exist_using(
                 table_name=Search.__tablename__, 
                 column_name="ids_list", 
@@ -146,7 +146,7 @@ class SQLAlchemyDriver(object):
                 column_type="text[]",
                 metadata=md
             )
-
+        
         add_unique_constraint_if_not_exist(
                 table_name=State.__tablename__, 
                 column_name="code", 
@@ -160,13 +160,11 @@ class SQLAlchemyDriver(object):
                 metadata=md
             )
 
-
         drop_primary_key_constraint(
                     table_name=RequestState.__tablename__,
                     primary_key="request_has_state_pkey",
                     driver=self
             )
-
 
         add_primary_key_constraint(
                     table_name=RequestState.__tablename__,
@@ -373,6 +371,7 @@ def change_column_type_if_exist(table_name, column_name, driver, column_type, me
                 )
                 session.commit()
 
+
 def change_column_type_if_exist_using(table_name, column_name, driver, column_type, metadata):
     table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
     if str(column_name) not in table.c:    
@@ -390,6 +389,7 @@ def change_column_type_if_exist_using(table_name, column_name, driver, column_ty
                 )
                 session.commit()
         
+
 def add_foreign_key_column_if_not_exist(
     table_name,
     column_name,
@@ -405,9 +405,11 @@ def add_foreign_key_column_if_not_exist(
         table_name, column_name, fk_table_name, fk_column_name, driver, metadata
     )
 
+
 def drop_foreign_key_column_if_exist(table_name, column_name, driver, metadata):
     drop_foreign_key_constraint_if_exist(table_name, column_name, driver, metadata)
     drop_column_if_exist(table_name, column_name, driver, metadata)
+
 
 def add_column_if_not_exist(table_name, column, driver, metadata):
     column_name = column.compile(dialect=driver.engine.dialect)
@@ -423,6 +425,7 @@ def add_column_if_not_exist(table_name, column, driver, metadata):
             )
             session.commit()
 
+
 def drop_column_if_exist(table_name, column_name, driver, metadata):
     table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
     if column_name in table.c:
@@ -431,6 +434,7 @@ def drop_column_if_exist(table_name, column_name, driver, metadata):
                 'ALTER TABLE "{}" DROP COLUMN {};'.format(table_name, column_name)
             )
             session.commit()
+
 
 def add_foreign_key_constraint_if_not_exist(
     table_name, column_name, fk_table_name, fk_column_name, driver, metadata
@@ -452,6 +456,7 @@ def add_foreign_key_constraint_if_not_exist(
                     )
                 )
                 session.commit()
+
 
 def drop_foreign_key_constraint_if_exist(table_name, column_name, driver, metadata):
     table = Table(table_name, metadata, autoload=True, autoload_with=driver.engine)
