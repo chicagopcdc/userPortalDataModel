@@ -81,6 +81,7 @@ class Search(Base):
     filter_source = Column(Enum(FilterSourceType))
     filter_source_internal_id = Column(Integer, default=None)
     ids_list = Column(ARRAY(Text), nullable=True)
+    graphql_object = Column(JSONB, server_default=text("'{}'"))
 
     es_index = Column(String(255))
     dataset_version = Column(String(255))

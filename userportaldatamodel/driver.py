@@ -181,6 +181,16 @@ class SQLAlchemyDriver(object):
         #         metadata=md,
         #     )
 
+        add_column_if_not_exist(
+                    table_name=Search.__tablename__, 
+                    column=Column("graphql_object", JSONB, server_default=text("'{}'")), 
+                    driver=self, 
+                    metadata=md,
+            )
+
+
+
+
 def add_value_to_existing_enum(table_name, column_name, driver, enum_obj, enum_name):
     enum_name = enum_name
     tmp_enum_name = "tmp_" + enum_name
