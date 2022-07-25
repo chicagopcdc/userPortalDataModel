@@ -5,6 +5,7 @@ from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy import String, Column, MetaData, Table, Enum, Integer, Text
 from .models import *  # noqa
+from sqlalchemy.dialects.postgresql import JSONB
 
 
 class SQLAlchemyDriver(object):
