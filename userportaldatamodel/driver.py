@@ -3,7 +3,7 @@ from cdislogging import get_logger
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 from sqlalchemy import create_engine
-from sqlalchemy import String, Column, MetaData, Table, Enum, Integer, Text
+from sqlalchemy import String, Column, MetaData, Table, Enum, Integer, Text, text
 from .models import *  # noqa
 from sqlalchemy.dialects.postgresql import JSONB
 
