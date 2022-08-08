@@ -48,6 +48,7 @@ class Project(Base):
     # searches = association_proxy('searches', 'search')
     searches = relationship("Search", secondary="project_has_search")
     statisticians = relationship("Statistician", secondary="project_has_statistician")
+    associated_uses = relationship("AssociatedUser", secondary="project_has_associated_user")
 
 
     # def __init__(self, **kwargs):
@@ -74,6 +75,7 @@ class Project(Base):
             "description": self.description,
             "searches": self.searches,
             "statisticians": self.statisticians,
+            "associated_users": self.associated_uses,
             "approved_url": self.approved_url
         }
         return json.dumps(str_out)
