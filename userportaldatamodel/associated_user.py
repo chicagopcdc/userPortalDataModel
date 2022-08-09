@@ -27,6 +27,7 @@ class AssociatedUser(Base):
     email = Column(Text, nullable=True)
 
     projects = relationship("Project", secondary="project_has_associated_user")
+    project_role = relationship("ProjectAssociatedUser")
     
     active = Column(Boolean, default=True)
     create_date = Column(DateTime(timezone=False), server_default=func.now())
