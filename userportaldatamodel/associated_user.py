@@ -27,7 +27,7 @@ class AssociatedUser(Base):
     email = Column(Text, nullable=True)
 
     # METADATA_ACCESS, DATA_ACCESS
-    role = Column(Text, nullable=False)
+    role = Column(Text, default="METADATA_ACCESS", nullable=False)
 
     projects = relationship("Project", secondary="project_has_associated_user")
     
