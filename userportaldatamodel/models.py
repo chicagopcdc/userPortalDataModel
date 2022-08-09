@@ -12,7 +12,7 @@ from .consortium_data_contributor import ConsortiumDataContributor
 from .search import Search, ProjectSearch, FilterSourceType
 from .state import State, RequestState
 from .statistician import Statistician, ProjectStatistician
-from .associated_user import AssociatedUser, ASSOCIATED_USER_ROLES
+from .associated_user import ProjectAssociatedUser, AssociatedUser, ASSOCIATED_USER_ROLES
 # from .transition import Transition
 
 
