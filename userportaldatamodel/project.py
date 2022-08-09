@@ -49,7 +49,7 @@ class Project(Base):
     searches = relationship("Search", secondary="project_has_search")
     statisticians = relationship("Statistician", secondary="project_has_statistician")
     associated_users = relationship("AssociatedUser", secondary="project_has_associated_user")
-    associated_users_role = relationship("ProjectAssociatedUser")
+    associated_users_roles = relationship("ProjectAssociatedUser")
 
 
     # def __init__(self, **kwargs):
