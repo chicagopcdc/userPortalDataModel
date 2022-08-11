@@ -9,6 +9,8 @@ class ProjectSchema(SQLAlchemyAutoSchema):
     requests = Nested('RequestSchema', many=True)
     statisticians = Nested('StatisticianSchema', many=True)
     associated_users = Nested('AssociatedUserSchema', many=True)
+    associated_users_roles = Nested("ProjectAssociatedUser", many=True)
+
 
     class Meta:
         model = Project
