@@ -11,3 +11,4 @@ from .input_type_schema import InputTypeSchema
 from .consortium_data_contributor_schema import ConsortiumDataContributorSchema
 from .statistician_schema import StatisticianSchema
 from .associated_user_schema import AssociatedUserSchema
+from .project_associated_user_schema import ProjectAssociatedUserSchema
