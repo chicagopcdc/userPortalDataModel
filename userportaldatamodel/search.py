@@ -113,8 +113,7 @@ class Search(Base):
 
     is_snapshot = Column(Boolean, default=False)
 
-    snapshots = relationship("SearchSnapshot")
-    shared_with = relationship("SearchIsShared")
+    snapshots = relationship("SearchIsShared", backref="search")
 
 
     # def __init__(self, **kwargs):
