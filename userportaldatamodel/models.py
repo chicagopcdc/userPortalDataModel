@@ -12,4 +12,5 @@ from .consortium_data_contributor import ConsortiumDataContributor
 from .search import Search, ProjectSearch, FilterSourceType, SearchIsShared
 from .state import State, RequestState
 from .statistician import Statistician, ProjectStatistician
+from .associated_user import ProjectAssociatedUser, AssociatedUser, ASSOCIATED_USER_ROLES
 # from .transition import Transition
