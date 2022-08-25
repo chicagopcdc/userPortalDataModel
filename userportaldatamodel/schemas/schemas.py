@@ -12,3 +12,5 @@ from .consortium_data_contributor_schema import ConsortiumDataContributorSchema
 from .statistician_schema import StatisticianSchema
 from .associated_user_schema import AssociatedUserSchema
 from .project_associated_user_schema import ProjectAssociatedUserSchema
+from .search_is_shared_schema import SearchIsSharedSchema
+from .request_has_state_schema import RequestStateSchema

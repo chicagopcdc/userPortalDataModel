@@ -75,10 +75,9 @@ class SearchIsShared(Base):
     """A search that is shared with another user."""
 
     __tablename__ = "search_is_shared"
+    id = Column(Integer, primary_key=True)
     search_id = Column(Integer, ForeignKey("search.id"), primary_key=True)
-    user_id = Column(
-        Integer, nullable=True, primary_key=True
-    )  # user with whom the search is shared
+    user_id = Column(Integer, ForeignKey("search.user_id"), nullable=True)  # user with whom the search is shared
     write_access = Column(Boolean, default=True)
     delete_access = Column(Boolean, default=False)
     shareable_token = Column(String(255), nullable=False)
