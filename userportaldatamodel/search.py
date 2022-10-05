@@ -76,9 +76,9 @@ class SearchIsShared(Base):
 
     __tablename__ = "search_is_shared"
     id = Column(Integer, primary_key=True)
-    search_id = Column(Integer, ForeignKey("search.id"))
-    user_id = Column(ARRAY(Text), nullable=True)
-    access_role = Column(String(255))
+    search_id = Column(Integer, ForeignKey("search.id"), nullable=False)
+    user_id = Column(ARRAY(Text), nullable=False)
+    access_role = Column(String(255), default="READ")
     shareable_token = Column(String(255), nullable=False)
 
     
