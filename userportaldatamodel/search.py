@@ -76,10 +76,9 @@ class SearchIsShared(Base):
 
     __tablename__ = "search_is_shared"
     id = Column(Integer, primary_key=True)
-    search_id = Column(Integer, ForeignKey("search.id"), primary_key=True)
-    user_id = Column(Integer, ForeignKey("search.user_id"), nullable=True)  # user with whom the search is shared
-    write_access = Column(Boolean, default=True)
-    delete_access = Column(Boolean, default=False)
+    search_id = Column(Integer, ForeignKey("search.id"))
+    user_id = Column(ARRAY(Text), nullable=True)
+    access_role = Column(String(255))
     shareable_token = Column(String(255), nullable=False)
 
     
@@ -109,8 +108,6 @@ class Search(Base):
     update_date = Column(
         DateTime(timezone=False), server_default=func.now(), onupdate=func.now()
     )
-
-    is_snapshot = Column(Boolean, default=False)
 
     snapshots = relationship("SearchIsShared", backref="search")
 
