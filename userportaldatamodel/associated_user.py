@@ -39,8 +39,7 @@ class AssociatedUser(Base):
             "id": self.id,
             "user_id": self.user_id,
             "email": self.email,
-            "active": self.active,
-            "projects": self.projects
+            "active": self.active
         }
         return json.dumps(str_out)
 
