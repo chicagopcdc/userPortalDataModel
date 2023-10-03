@@ -15,8 +15,6 @@ from sqlalchemy.schema import ForeignKey
 from sqlalchemy.orm import relationship, backref
 
 
-ASSOCIATED_USER_ROLES = ["DATA_ACCESS", "METADATA_ACCESS"]
-
 class AssociatedUserRoles(Base):
     __tablename__ = "associated_user_role"
 
