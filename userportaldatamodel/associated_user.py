@@ -17,6 +17,33 @@ from sqlalchemy.orm import relationship, backref
 
 ASSOCIATED_USER_ROLES = ["DATA_ACCESS", "METADATA_ACCESS"]
 
+class AssociatedUserRoles(Base):
+    __tablename__ = "associated_user_role"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    
+    role = Column(String)
+    code = Column(String, unique=True)
+
+    create_date = Column(DateTime(timezone=False), server_default=func.now())
+    update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
+   
+
+    def __str__(self):
+        str_out = {
+            "id": self.id,
+            "name": self.name,
+            "code": self.code
+        }
+        return json.dumps(str_out)
+
+    def __repr__(self):
+        return self.__str__()
+
+
+
+
+
 class AssociatedUser(Base):
     __tablename__ = "associated_user"
 
