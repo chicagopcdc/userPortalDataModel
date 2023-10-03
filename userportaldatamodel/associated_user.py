@@ -16,7 +16,7 @@ from sqlalchemy.orm import relationship, backref
 
 
 class AssociatedUserRoles(Base):
-    __tablename__ = "associated_user_role"
+    __tablename__ = "associated_user_roles"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     
