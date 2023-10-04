@@ -83,7 +83,7 @@ class ProjectAssociatedUser(Base):
 
     # METADATA_ACCESS, DATA_ACCESS
     role = Column(Text, default="METADATA_ACCESS", nullable=False)
-
+    active = Column(Boolean, default=True, nullable=False)
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
 
