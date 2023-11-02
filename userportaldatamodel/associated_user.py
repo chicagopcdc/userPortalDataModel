@@ -83,7 +83,7 @@ class ProjectAssociatedUser(Base):
     associated_user = relationship("AssociatedUser", backref=backref("project_has_associated_user"))
 
     # METADATA_ACCESS, DATA_ACCESS
-    role = Column(Integer, ForeignKey('associated_user_role.id'))
+    role = Column(Integer, ForeignKey('associated_user_roles.id'))
     active = Column(Boolean, default=True, nullable=False)
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
