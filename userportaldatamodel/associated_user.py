@@ -25,8 +25,6 @@ class AssociatedUserRoles(Base):
 
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
-    
-    projects = relationship('ProjectAssociatedUser', backref='role')
 
     def __str__(self):
         str_out = {
@@ -82,8 +80,10 @@ class ProjectAssociatedUser(Base):
     associated_user_id = Column(Integer, ForeignKey("associated_user.id"), primary_key=True)
     associated_user = relationship("AssociatedUser", backref=backref("project_has_associated_user"))
 
-    # METADATA_ACCESS, DATA_ACCESS
     role_id = Column(Integer, ForeignKey('associated_user_roles.id'))
+    role = relationship('AssociatedUserRoles', backref='project_has_associated_user')
+
+    # METADATA_ACCESS, DATA_ACCESS
     active = Column(Boolean, default=True, nullable=False)
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
