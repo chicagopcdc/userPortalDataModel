@@ -31,7 +31,7 @@ class AssociatedUserRoles(Base):
     def __str__(self):
         str_out = {
             "id": self.id,
-            "name": self.role,
+            "role": self.role,
             "code": self.code
         }
         return json.dumps(str_out)
