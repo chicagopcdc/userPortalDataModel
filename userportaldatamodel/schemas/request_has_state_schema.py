@@ -4,9 +4,9 @@ from userportaldatamodel.models import RequestState
 
 
 class RequestStateSchema(SQLAlchemyAutoSchema):
-
+    state = Nested("StateSchema")
+    request = Nested("RequestSchema")
     class Meta:
         model = RequestState
         include_fk = True
-        state = Nested("StateSchema")
-        request = Nested("RequestSchema")
+        
