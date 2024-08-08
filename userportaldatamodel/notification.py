@@ -1,0 +1,48 @@
+from . import Base
+import datetime
+from sqlalchemy import (
+    Integer,
+    String,
+    Column,
+    Table,
+    Boolean,
+    BigInteger,
+    DateTime,
+    Text,
+)
+from sqlalchemy import UniqueConstraint, Index, CheckConstraint
+from sqlalchemy.orm.collections import attribute_mapped_collection
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.schema import ForeignKey
+from sqlalchemy.sql import func
+from sqlalchemy.types import LargeBinary
+from sqlalchemy.orm.collections import MappedCollection, collection
+import json
+
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from marshmallow_sqlalchemy.fields import Nested
+
+class Notification(Base):
+    __tablename__ = "notification"
+
+    message_id = Column(Integer, primary_key=True, nullable=False, autoincrement=True) 
+    user_id = Column(Integer, primary_key=True, nullable=False)
+    seen_date = Column(DateTime(timezone=False), server_default=func.now())
+    seen = Column(Boolean, nullable=False, server_default='false')
+    message_id = Column(Integer, ForeignKey("messageid"))
+
+    notification_log = relationship("notification_log", backref="notifications")
+
+    def __str__(self):
+        str_output = {
+            "id": self.message_id,
+            "user": self.user_id,
+            "seen_date": self.seen_date,
+            "seen_check": self.seen_check,
+        }
+        return json.dumps(str_output)
+
+    def __repr__(self):
+        return self.__str__()
