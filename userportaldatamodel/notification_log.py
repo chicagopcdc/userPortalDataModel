@@ -27,17 +27,15 @@ from marshmallow_sqlalchemy.fields import Nested
 class NotificationLog(Base):
     __tablename__ = "notification_log"
 
-    messageid = Column(Integer, primary_key=True, nullable=False, autoincrement=True) 
-    message = Column(String)
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True) 
+    message = Column(String, nullable=False)
     create_date = Column(DateTime(timezone=False), server_default=func.now(), nullable=False)
-    limit_check = Column(Boolean, nullable=False, server_default='false')
 
     def __str__(self):
         str_output = {
             "id": self.messageid,
             "message": self.message,
             "create_date": self.create_date,
-            "limit_check": self.limit_check,
         }
         return json.dumps(str_output)
 

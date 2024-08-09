@@ -27,13 +27,11 @@ from marshmallow_sqlalchemy.fields import Nested
 class Notification(Base):
     __tablename__ = "notification"
 
-    message_id = Column(Integer, primary_key=True, nullable=False) 
+    message_id = Column(Integer, ForeignKey("notification_log.id"), primary_key=True, nullable=False) 
     user_id = Column(Integer, primary_key=True, nullable=False)
-    seen_date = Column(DateTime(timezone=False), server_default=func.now())
     seen = Column(Boolean, nullable=False, server_default='false')
-    message_id = Column(Integer, ForeignKey("messageid"))
 
-    notification_log = relationship("notification_log", backref="notifications")
+    notification_log = relationship("notification_log", backref="notification")
 
     def __str__(self):
         str_output = {
