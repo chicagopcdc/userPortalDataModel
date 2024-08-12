@@ -28,20 +28,16 @@ class NotificationLog(Base):
     __tablename__ = "notification_log"
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True) 
-    message = Column(String, nullable=False)
+    notif_message = Column(String, nullable=False)
     create_date = Column(DateTime(timezone=False), server_default=func.now(), nullable=False)
 
     def __str__(self):
         str_output = {
-            "id": self.messageid,
-            "message": self.message,
+            "id": self.id,
+            "notification": self.notif_message,
             "create_date": self.create_date,
         }
         return json.dumps(str_output)
 
     def __repr__(self):
         return self.__str__()
-
-   
-
-
