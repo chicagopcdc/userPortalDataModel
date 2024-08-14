@@ -28,7 +28,7 @@ class Notification(Base):
     __tablename__ = "notification"
 
     notification_id = Column(Integer, ForeignKey("notification_log.id"), primary_key=True, nullable=False) 
-    user_id = Column(Integer, ForeignKey("associated_useer_roles.id"), primary_key=True, nullable=False)
+    user_id = Column(Integer, ForeignKey("associated_user_roles.id"), primary_key=True, nullable=False)
     seen = Column(Boolean, nullable=False, server_default='false')
 
     notification_log = relationship("notification_log", backref="notification")
