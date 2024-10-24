@@ -45,7 +45,7 @@ class Request(Base):
     def __str__(self):
         str_out = {
             "id": self.id,
-            "project": self.project,
+            "project_id": self.project_id,
         }
         return json.dumps(str_out)
 
