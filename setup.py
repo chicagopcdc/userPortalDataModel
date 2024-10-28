@@ -22,6 +22,6 @@ setup(
     name="userportaldatamodel",
     version="1.6.4", # get_version(),
     packages=find_packages(),
-    install_requires=["sqlalchemy~=2.0.36", "cdislogging", "marshmallow-sqlalchemy", "marshmallow_enum", "psycopg2==^2.8.3"],
+    install_requires=["sqlalchemy~=2.0.36", "cdislogging", "marshmallow-sqlalchemy", "marshmallow_enum", "psycopg2>=2.8.3"],
     scripts=["bin/userportaldatamodel-init"],
 )
