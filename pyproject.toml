@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "userportaldatamodel"
-version = "1.6.3"
+version = "1.6.4"
 description = "contains database model for project request tool"
 authors = ["PCDC UChicago <lgraglia@uchicago.edu>"]
 readme = "README.md"
