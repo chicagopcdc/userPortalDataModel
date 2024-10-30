@@ -4,7 +4,7 @@ name: Check Version in pyproject.toml
 on:
   pull_request:
     branches:
-      - update_dependencies
+      - master
 
 jobs:
   version_check:
