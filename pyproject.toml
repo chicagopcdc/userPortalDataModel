@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "userportaldatamodel"
+version = "1.6.3"
+description = "contains database model for project request tool"
+authors = ["PCDC UChicago <lgraglia@uchicago.edu>"]
+readme = "README.md"
+license = "Apache-2.0"
+[tool.poetry.dependencies]
+python = "^3.9"
+sqlalchemy = "^2.0.36"
+marshmallow-sqlalchemy = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
