@@ -41,8 +41,10 @@ jobs:
         id: compare_versions
         run: |
           current_version="${{ env.current_version }}"
-          latest_tag="${{ env.latest_tag }}"
-          if [ "$(printf '%s\n' "$latest_tag" "$current_version" | sort -V | tail -n 1)" != "$current_version" ]; then
+          if [ "$latest_tag" = "$current_version" ]; then
+            echo "❌ The version in pyproject.toml ($current_version) is equal to the latest tag ($latest_tag)."
+            exit 1
+          elif [ "$(printf '%s\n' "$latest_tag" "$current_version" | sort -V | tail -n 1)" != "$current_version" ]; then
             echo "❌ The version in pyproject.toml ($current_version) is not greater than the latest tag ($latest_tag)."
             exit 1
           else
