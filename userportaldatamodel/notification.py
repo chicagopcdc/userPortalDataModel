@@ -15,6 +15,7 @@ class Notification(Base):
     notification_id = Column(Integer, ForeignKey("notification_log.id"), primary_key=True, nullable=False) 
     user_id = Column(Integer, primary_key=True, nullable=False)
     seen = Column(Boolean, nullable=False, default=True)
+    active = Column(Boolean, default=True)
 
     notification_log = relationship("NotificationLog", backref="notification")
 
