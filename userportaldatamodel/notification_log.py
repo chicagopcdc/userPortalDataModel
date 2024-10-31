@@ -1,28 +1,13 @@
 from . import Base
-import datetime
 from sqlalchemy import (
     Integer,
     String,
     Column,
-    Table,
-    Boolean,
-    BigInteger,
     DateTime,
-    Text,
 )
-from sqlalchemy import UniqueConstraint, Index, CheckConstraint
-from sqlalchemy.orm.collections import attribute_mapped_collection
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.schema import ForeignKey
 from sqlalchemy.sql import func
-from sqlalchemy.types import LargeBinary
-from sqlalchemy.orm.collections import MappedCollection, collection
-import json
 
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from marshmallow_sqlalchemy.fields import Nested
+import json
 
 class NotificationLog(Base):
     __tablename__ = "notification_log"
@@ -35,7 +20,7 @@ class NotificationLog(Base):
         str_output = {
             "id": self.id,
             "notification": self.notif_message,
-            "create_date": self.create_date,
+            "create_date": self.create_date.isoformat(),
         }
         return json.dumps(str_output)
 
