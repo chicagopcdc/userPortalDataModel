@@ -13,7 +13,7 @@ class NotificationLog(Base):
     __tablename__ = "notification_log"
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True) 
-    notif_message = Column(String, nullable=False)
+    notif_message = Column(String, unique=True, nullable=False)
     create_date = Column(DateTime(timezone=False), server_default=func.now(), nullable=False)
 
     def __str__(self):
