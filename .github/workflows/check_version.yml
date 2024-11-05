@@ -1,0 +1,52 @@
+# .github/workflows/check_version.yml
+name: Check Version in pyproject.toml
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  version_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Poetry
+        run: curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Read version from pyproject.toml
+        id: read_version
+        run: |
+          version=$(poetry version -s)
+          echo "current_version=${version}" >> $GITHUB_ENV
+
+      - name: Fetch latest tags
+        run: |
+          git fetch --tags
+
+      - name: Get the latest tag
+        id: get_latest_tag
+        run: |
+          latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "latest_tag=${latest_tag}" >> $GITHUB_ENV
+
+      - name: Compare versions
+        id: compare_versions
+        run: |
+          current_version="${{ env.current_version }}"
+          if [ "$latest_tag" = "$current_version" ]; then
+            echo "❌ The version in pyproject.toml ($current_version) is equal to the latest tag ($latest_tag)."
+            exit 1
+          elif [ "$(printf '%s\n' "$latest_tag" "$current_version" | sort -V | tail -n 1)" != "$current_version" ]; then
+            echo "❌ The version in pyproject.toml ($current_version) is not greater than the latest tag ($latest_tag)."
+            exit 1
+          else
+            echo "✅ The version in pyproject.toml ($current_version) is greater than the latest tag ($latest_tag)."
+          fi
