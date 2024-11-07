@@ -21,7 +21,7 @@ class Notification(Base):
 
     def __str__(self):
         str_output = {
-            "id": self.notification_id,
+            "id": self.notification_log_id,
             "user": self.user_id,
             "seen": self.seen,
         }

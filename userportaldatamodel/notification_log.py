@@ -21,7 +21,7 @@ class NotificationLog(Base):
     def __str__(self):
         str_output = {
             "id": self.id,
-            "notification": self.notif_message,
+            "notification": self.message,
             "create_date": self.create_date.isoformat(),
         }
         return json.dumps(str_output)
