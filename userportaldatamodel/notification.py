@@ -13,11 +13,11 @@ import json
 class Notification(Base):
     __tablename__ = "notification"
 
-    notification_id = Column(Integer, ForeignKey("notification_log.id"), primary_key=True, nullable=False) 
+    notification_log_id = Column(Integer, ForeignKey("notification_log.id"), primary_key=True, nullable=False) 
     user_id = Column(Integer, primary_key=True, nullable=False)
     seen = Column(Boolean, nullable=False, default=False)
     create_date = Column(DateTime(timezone=False), server_default=func.now(), nullable=False)
-    notification_log_id = relationship("NotificationLog", backref="notification")
+    messages = relationship("NotificationLog", backref="notification")
 
     def __str__(self):
         str_output = {
