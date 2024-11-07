@@ -3,6 +3,7 @@ from sqlalchemy import (
     Integer,
     String,
     Column,
+    Boolean,
     DateTime,
 )
 from sqlalchemy.sql import func
@@ -15,6 +16,7 @@ class NotificationLog(Base):
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True) 
     notif_message = Column(String, unique=True, nullable=False)
     create_date = Column(DateTime(timezone=False), server_default=func.now(), nullable=False)
+    active = Column(Boolean, nullable=False, default=True)
 
     def __str__(self):
         str_output = {

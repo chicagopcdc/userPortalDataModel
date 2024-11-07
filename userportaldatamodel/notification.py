@@ -3,8 +3,9 @@ from sqlalchemy import (
     Integer,
     Column,
     Boolean,
-
+    DateTime,
 )
+from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import ForeignKey
 import json
@@ -15,9 +16,8 @@ class Notification(Base):
     notification_id = Column(Integer, ForeignKey("notification_log.id"), primary_key=True, nullable=False) 
     user_id = Column(Integer, primary_key=True, nullable=False)
     seen = Column(Boolean, nullable=False, default=False)
-    active = Column(Boolean, nullable=False, default=True)
-
-    notification_log = relationship("NotificationLog", backref="notification")
+    create_date = Column(DateTime(timezone=False), server_default=func.now(), nullable=False)
+    notification_log_id = relationship("NotificationLog", backref="notification")
 
     def __str__(self):
         str_output = {
