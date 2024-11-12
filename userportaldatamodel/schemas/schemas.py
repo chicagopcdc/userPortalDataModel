@@ -15,3 +15,5 @@ from .project_associated_user_schema import ProjectAssociatedUserSchema
 from .search_is_shared_schema import SearchIsSharedSchema
 from .request_has_state_schema import RequestStateSchema
 from .associated_user_roles_schema import AssociatedUserRolesSchema
+from .notification_schema import NotificationSchema
+from .notificationlog_schema import NotificationLogSchema
