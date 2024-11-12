@@ -16,4 +16,4 @@ from .search_is_shared_schema import SearchIsSharedSchema
 from .request_has_state_schema import RequestStateSchema
 from .associated_user_roles_schema import AssociatedUserRolesSchema
 from .notification_schema import NotificationSchema
-from .notificationlog_schema import NotificationLogSchema
+from .notification_log_schema import NotificationLogSchema
