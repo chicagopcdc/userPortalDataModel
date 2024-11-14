@@ -17,6 +17,7 @@ class NotificationLog(Base):
     message = Column(String, unique=True, nullable=False)
     create_date = Column(DateTime(timezone=False), server_default=func.now(), nullable=False)
     active = Column(Boolean, nullable=False, default=True)
+    expiration_date = Column(DateTime(timezone=False), nullable=True)
 
     def __str__(self):
         str_output = {
