@@ -111,6 +111,7 @@ class Search(Base):
 
     snapshots = relationship("SearchIsShared", backref="search")
 
+    is_valid = Column(Boolean, default=True)
 
     # def __init__(self, **kwargs):
     #     # if "scope" in kwargs:
