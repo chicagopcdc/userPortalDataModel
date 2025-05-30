@@ -14,9 +14,9 @@ class ProjectDataPoints(Base):
     __tablename__ = "project_datapoints"
 
     id = Column(Integer,primary_key=True, autoincrement=True)
-    datapoints_term = Column(String)
-    datapoints_value_list = Column(ARRAY(String))
-    datapoints_type = Column(CHAR)
+    term = Column(String)
+    value_list = Column(ARRAY(String))
+    type = Column(CHAR)
     project_id = Column(Integer)
 
     __table_args__ = (
@@ -26,9 +26,9 @@ class ProjectDataPoints(Base):
     def __str__(self):
         str_out = {
             "id": self.id,
-            "datapoints_term": self.datapoints_term,
-            "datapoints_value_list": self.datapoints_value_list,
-            "datapoints_type": self.datapoints_type,
+            "term": self.term,
+            "value_list": self.value_list,
+            "type": self.type,
             "project_id": self.project_id
         }
         return json.dumps(str_out)
