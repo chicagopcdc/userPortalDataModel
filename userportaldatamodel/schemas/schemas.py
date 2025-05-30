@@ -17,3 +17,4 @@ from .request_has_state_schema import RequestStateSchema
 from .associated_user_roles_schema import AssociatedUserRolesSchema
 from .notification_schema import NotificationSchema
 from .notification_log_schema import NotificationLogSchema
+from .project_datapoints_schema import ProjectDataPointsSchema

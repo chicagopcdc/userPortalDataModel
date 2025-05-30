@@ -16,3 +16,4 @@ from .associated_user import ProjectAssociatedUser, AssociatedUser, AssociatedUs
 from .transition import Transition
 from .notification import Notification
 from .notification_log import NotificationLog
+from .project_datapoints import ProjectDataPoints
