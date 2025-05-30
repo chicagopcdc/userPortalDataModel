@@ -1,13 +1,14 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from userportaldatamodel.models import ProjectDataPoints
-
-"""
-created schema for ProjectDataPoints. needs to be updated in the
-associated repository.
-"""
+from marshmallow_sqlalchemy.fields import Nested
 
 
 class ProjectDataPointsSchema(SQLAlchemyAutoSchema):
+    project = Nested('Project')
+    
     class Meta:
         model = ProjectDataPoints
-        load_instance = True
+        include_fk = True
+
+    
+    
