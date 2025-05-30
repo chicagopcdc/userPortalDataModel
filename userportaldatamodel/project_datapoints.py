@@ -13,14 +13,14 @@ import json
 class ProjectDataPoints(Base):
     __tablename__ = "project_datapoints"
 
-    id = Column(Integer,primary_key=True, autoincrement=True)
-    term = Column(String)
-    value_list = Column(ARRAY(String))
-    type = Column(CHAR)
-    project_id = Column(Integer)
+    id = Column(Integer,primary_key=True, autoincrement=True,nullable=False)
+    term = Column(String, nullable = False)
+    value_list = Column(ARRAY(String), nullable=False,default=list)
+    type = Column(CHAR, nullable=False)
+    project_id = Column(Integer,nullable=True)
 
     __table_args__ = (
-         CheckConstraint("datapoints_type IN ('w', 'b')", name="datapoints_type_check"),
+         CheckConstraint("type IN ('w', 'b')", name="type_check"),
     )
 
     def __str__(self):
