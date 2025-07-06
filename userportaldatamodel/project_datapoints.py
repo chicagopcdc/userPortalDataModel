@@ -35,7 +35,6 @@ class ProjectDataPoints(Base):
             "term": self.term,
             "value_list": self.value_list,
             "type": self.type,
-            "active": self.active,
             "project_id": self.project_id
         }
         return json.dumps(str_out)
