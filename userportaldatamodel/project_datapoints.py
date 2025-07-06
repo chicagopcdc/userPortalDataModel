@@ -4,6 +4,7 @@ from sqlalchemy import (
     String,
     Column,
     CHAR,
+    Boolean
 )
 
 from sqlalchemy import CheckConstraint
