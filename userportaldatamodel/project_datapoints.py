@@ -19,6 +19,7 @@ class ProjectDataPoints(Base):
     term = Column(String, nullable = False)
     value_list = Column(ARRAY(String), nullable=False,default=list)
     type = Column(CHAR, nullable=False)
+    active = Column(Boolean, nullable=False)
 
     project_id = Column(Integer,ForeignKey("project.id"),nullable=True)
     project = relationship("Project",backref="project_datapoints")
@@ -33,6 +34,7 @@ class ProjectDataPoints(Base):
             "term": self.term,
             "value_list": self.value_list,
             "type": self.type,
+            "active": self.active,
             "project_id": self.project_id
         }
         return json.dumps(str_out)
