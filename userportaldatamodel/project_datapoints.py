@@ -20,7 +20,7 @@ class ProjectDataPoints(Base):
     term = Column(String, nullable = False)
     value_list = Column(ARRAY(String), nullable=False,default=list)
     type = Column(CHAR, nullable=False)
-    active = Column(Boolean, nullable=False)
+    active = Column(Boolean, nullable=False,default=True)
 
     project_id = Column(Integer,ForeignKey("project.id"),nullable=True)
     project = relationship("Project",backref="project_datapoints")
