@@ -3,7 +3,7 @@ from userportaldatamodel.models import ProjectDataPoints
 from marshmallow_sqlalchemy.fields import Nested
 
 class ProjectDataPointsSchema(SQLAlchemyAutoSchema):
-    project = Nested('ProjectSchema')
+    project = Nested('ProjectSchema',, exclude=["project_datapoints",])
     
     class Meta:
         model = ProjectDataPoints
