@@ -47,7 +47,7 @@ class AssociatedUser(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     user_id = Column(Integer, nullable=True)
-    user_source = Column(String, default='fence', nullable=True)
+    user_source = Column(String, nullable=True)
     email = Column(Text, nullable=True)
 
     projects = relationship("Project", secondary="project_has_associated_user")
