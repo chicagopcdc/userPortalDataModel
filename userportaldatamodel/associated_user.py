@@ -58,9 +58,9 @@ class AssociatedUser(Base):
         "ProjectAssociatedUser",
         backref=backref(
             "associated_user_roles",
-            overlaps="associated_users,projects",
+            overlaps="associated_users,projects,project_role",
         ),
-        overlaps="associated_users,projects,project_has_associated_user",
+        overlaps="associated_users,projects,project_has_associated_user,project_role",
     )
 
     active = Column(Boolean, default=True)
@@ -97,9 +97,9 @@ class ProjectAssociatedUser(Base):
         "AssociatedUser",
         backref=backref(
             "project_has_associated_user",
-            overlaps="associated_users,associated_users_roles,projects,associated_user_roles",
+            overlaps="associated_users,associated_users_roles,projects,associated_user_roles,project_role",
         ),
-        overlaps="associated_users,associated_users_roles,projects,associated_user_roles",
+        overlaps="associated_users,associated_users_roles,projects,associated_user_roles,project_role",
     )
 
     role_id = Column(Integer, ForeignKey('associated_user_roles.id'), nullable=False)
