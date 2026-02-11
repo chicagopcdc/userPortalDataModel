@@ -56,10 +56,13 @@ class AssociatedUser(Base):
     # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
     project_role = relationship(
         "ProjectAssociatedUser",
-        backref="associated_user_roles",
+        backref=backref(
+            "associated_user_roles",
+            overlaps="associated_users,projects",
+        ),
         overlaps="associated_users,projects,project_has_associated_user",
     )
-    
+
     active = Column(Boolean, default=True)
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
@@ -92,8 +95,11 @@ class ProjectAssociatedUser(Base):
     # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
     associated_user = relationship(
         "AssociatedUser",
-        backref=backref("project_has_associated_user", overlaps="associated_users,associated_users_roles,projects"),
-        overlaps="associated_users,associated_users_roles,projects",
+        backref=backref(
+            "project_has_associated_user",
+            overlaps="associated_users,associated_users_roles,projects,associated_user_roles",
+        ),
+        overlaps="associated_users,associated_users_roles,projects,associated_user_roles",
     )
 
     role_id = Column(Integer, ForeignKey('associated_user_roles.id'), nullable=False)
