@@ -26,15 +26,23 @@ class RequestState(Base):
     __tablename__ = "request_has_state"
 
     request_id = Column(Integer, ForeignKey("request.id"), primary_key=True)
-    request = relationship("Request", backref=backref("request_has_state"))
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    request = relationship(
+        "Request",
+        backref=backref("request_has_state", overlaps="states"),
+        overlaps="states",
+    )
 
     state_id = Column(Integer, ForeignKey("state.id"), primary_key=True)
-    state = relationship("State", backref=backref("request_has_state"))
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    state = relationship(
+        "State",
+        backref=backref("request_has_state", overlaps="states"),
+        overlaps="states",
+    )
 
     create_date = Column(DateTime(timezone=False), server_default=func.now(), primary_key=True)
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
-
-
 
 
 class State(Base):
@@ -48,7 +56,6 @@ class State(Base):
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
    
-
     def __str__(self):
         str_out = {
             "id": self.id,

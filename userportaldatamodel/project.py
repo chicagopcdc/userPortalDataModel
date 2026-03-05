@@ -22,8 +22,6 @@ from sqlalchemy.orm.collections import MappedCollection, collection
 import json
 
 
-
-
 class Project(Base):
     
     __tablename__ = "project"
@@ -36,7 +34,7 @@ class Project(Base):
     last_name = Column(String)
     user_id = Column(Integer, nullable=True)
     user_source = Column(String, default='fence')
-    #TODO potentially this could be an hubspot ID
+    # TODO potentially this could be an hubspot ID
     institution = Column(String)
     description = Column(String)
 
@@ -44,13 +42,19 @@ class Project(Base):
 
     active = Column(Boolean, default=True)
 
-
     # searches = association_proxy('searches', 'search')
     searches = relationship("Search", secondary="project_has_search")
     statisticians = relationship("Statistician", secondary="project_has_statistician")
-    associated_users = relationship("AssociatedUser", secondary="project_has_associated_user")
-    associated_users_roles = relationship("ProjectAssociatedUser")
-
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    associated_users = relationship(
+        "AssociatedUser",
+        secondary="project_has_associated_user",
+        overlaps="associated_users_roles,project_has_associated_user",
+    )
+    associated_users_roles = relationship(
+        "ProjectAssociatedUser",
+        overlaps="associated_users,project_has_associated_user",
+    )
 
     # def __init__(self, **kwargs):
     #     # if "scope" in kwargs:
@@ -61,11 +65,9 @@ class Project(Base):
     #     #         kwargs["_scope"] = scope
     #     self.id = 1
 
-
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
     create_date = Column(DateTime(timezone=False), server_default=func.now())
    
-
     def __str__(self):
         str_out = {
             "id": self.id,
@@ -83,4 +85,3 @@ class Project(Base):
 
     def __repr__(self):
         return self.__str__()
-
