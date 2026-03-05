@@ -38,9 +38,6 @@ class AssociatedUserRoles(Base):
         return self.__str__()
 
 
-
-
-
 class AssociatedUser(Base):
     __tablename__ = "associated_user"
 
@@ -50,13 +47,25 @@ class AssociatedUser(Base):
     user_source = Column(String, nullable=True)
     email = Column(Text, nullable=True)
 
-    projects = relationship("Project", secondary="project_has_associated_user")
-    project_role = relationship("ProjectAssociatedUser")
-    
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    projects = relationship(
+        "Project",
+        secondary="project_has_associated_user",
+        overlaps="associated_users,associated_users_roles,project_has_associated_user",
+    )
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    project_role = relationship(
+        "ProjectAssociatedUser",
+        backref=backref(
+            "associated_user_roles",
+            overlaps="associated_users,projects,project_role",
+        ),
+        overlaps="associated_users,projects,project_has_associated_user,project_role",
+    )
+
     active = Column(Boolean, default=True)
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
-
 
     def __str__(self):
         str_out = {
@@ -75,13 +84,31 @@ class ProjectAssociatedUser(Base):
     __tablename__ = "project_has_associated_user"
 
     project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
-    project = relationship("Project", backref=backref("project_has_associated_user"))
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    project = relationship(
+        "Project",
+        backref=backref("project_has_associated_user", overlaps="associated_users,associated_users_roles,projects"),
+        overlaps="associated_users,associated_users_roles,projects",
+    )
 
     associated_user_id = Column(Integer, ForeignKey("associated_user.id"), primary_key=True)
-    associated_user = relationship("AssociatedUser", backref=backref("project_has_associated_user"))
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    associated_user = relationship(
+        "AssociatedUser",
+        backref=backref(
+            "project_has_associated_user",
+            overlaps="associated_users,associated_users_roles,projects,associated_user_roles,project_role",
+        ),
+        overlaps="associated_users,associated_users_roles,projects,associated_user_roles,project_role",
+    )
 
     role_id = Column(Integer, ForeignKey('associated_user_roles.id'), nullable=False)
-    role = relationship('AssociatedUserRoles', backref='project_has_associated_user')
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    role = relationship(
+        "AssociatedUserRoles",
+        backref=backref("project_has_associated_user", overlaps="projects,associated_users,associated_users_roles"),
+        overlaps="projects,associated_users,associated_users_roles",
+    )
 
     # METADATA_ACCESS, DATA_ACCESS
     active = Column(Boolean, default=True, nullable=False)

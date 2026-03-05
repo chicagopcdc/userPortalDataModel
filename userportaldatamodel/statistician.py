@@ -25,12 +25,16 @@ class Statistician(Base):
     
     email = Column(Text, nullable=True)
 
-    projects = relationship("Project", secondary="project_has_statistician")
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    projects = relationship(
+        "Project",
+        secondary="project_has_statistician",
+        overlaps="project_has_statistician,statisticians",
+    )
     
     active = Column(Boolean, default=True)
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
-
 
     def __str__(self):
         str_out = {
@@ -50,15 +54,20 @@ class ProjectStatistician(Base):
     __tablename__ = "project_has_statistician"
 
     project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
-    project = relationship("Project", backref=backref("project_has_statistician"))
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    project = relationship(
+        "Project",
+        backref=backref("project_has_statistician", overlaps="statisticians,projects"),
+        overlaps="statisticians,projects",
+    )
 
     statistician_id = Column(Integer, ForeignKey("statistician.id"), primary_key=True)
-    statistician = relationship("Statistician", backref=backref("project_has_statistician"))
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    statistician = relationship(
+        "Statistician",
+        backref=backref("project_has_statistician", overlaps="statisticians,projects"),
+        overlaps="statisticians,projects",
+    )
 
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(DateTime(timezone=False), server_default=func.now(), onupdate=func.now())
-
-
-
-
-

@@ -48,10 +48,20 @@ class ProjectSearch(Base):
     __tablename__ = "project_has_search"
 
     project_id = Column(Integer, ForeignKey("project.id"), primary_key=True)
-    project = relationship("Project", backref=backref("search_in_project"))
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    project = relationship(
+        "Project",
+        backref=backref("search_in_project", overlaps="searches,project_has_search"),
+        overlaps="searches,project_has_search",
+    )
 
     search_id = Column(Integer, ForeignKey("search.id"), primary_key=True)
-    search = relationship("Search", backref=backref("project_has_search"))
+    # Mark intentional relationship overlap to silence SQLAlchemy 2.x SAWarning (no behavior change)
+    search = relationship(
+        "Search",
+        backref=backref("project_has_search", overlaps="searches,search_in_project"),
+        overlaps="searches,search_in_project",
+    )
 
     create_date = Column(DateTime(timezone=False), server_default=func.now())
     update_date = Column(
