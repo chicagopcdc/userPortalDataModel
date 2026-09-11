@@ -24,7 +24,7 @@ class ProjectDataPoints(Base):
 
     # Set to False by the validate-project-datapoints job when the term/value_list
     # no longer match the current data dictionary.
-    is_valid = Column(Boolean, default=True)
+    is_valid = Column(Boolean, nullable=False, default=True)
 
     project_id = Column(Integer,ForeignKey("project.id"),nullable=True)
     project = relationship("Project",backref="project_datapoints")
@@ -39,6 +39,7 @@ class ProjectDataPoints(Base):
             "term": self.term,
             "value_list": self.value_list,
             "type": self.type,
+            "active": self.active,
             "project_id": self.project_id,
             "is_valid": self.is_valid
         }
