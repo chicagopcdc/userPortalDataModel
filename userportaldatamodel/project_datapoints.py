@@ -22,6 +22,10 @@ class ProjectDataPoints(Base):
     type = Column(CHAR, nullable=False)
     active = Column(Boolean, nullable=False,default=True)
 
+    # Set to False by the validate-project-datapoints job when the term/value_list
+    # no longer match the current data dictionary.
+    is_valid = Column(Boolean, nullable=False, default=True)
+
     project_id = Column(Integer,ForeignKey("project.id"),nullable=True)
     project = relationship("Project",backref="project_datapoints")
 
@@ -35,7 +39,9 @@ class ProjectDataPoints(Base):
             "term": self.term,
             "value_list": self.value_list,
             "type": self.type,
-            "project_id": self.project_id
+            "active": self.active,
+            "project_id": self.project_id,
+            "is_valid": self.is_valid
         }
         return json.dumps(str_out)
 
